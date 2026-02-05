@@ -19,6 +19,15 @@ const { title, description = 'Learning Difficulties and Disabilities in the Just
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title} | LDD Navigator</title>
+    <script is:inline>
+      // Apply saved font size immediately to prevent flash
+      (function() {
+        const stored = localStorage.getItem('ldd-font-size');
+        if (stored) {
+          document.documentElement.classList.add('font-size-' + stored);
+        }
+      })();
+    </script>
   </head>
   <body class="min-h-screen flex flex-col bg-white">
     <Header />

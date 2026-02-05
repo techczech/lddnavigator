@@ -26,7 +26,24 @@ const currentPath = Astro.url.pathname;
         </span>
       </a>
 
-      <div class="hidden md:flex items-center">
+      <div class="hidden md:flex items-center gap-4">
+        <!-- Font size controls -->
+        <div class="font-size-controls" role="group" aria-label="Font size controls">
+          <button
+            type="button"
+            class="font-size-btn font-decrease-btn"
+            aria-label="Decrease font size"
+            title="Decrease font size"
+          >−</button>
+          <span class="font-size-label" aria-live="polite">100%</span>
+          <button
+            type="button"
+            class="font-size-btn font-increase-btn"
+            aria-label="Increase font size"
+            title="Increase font size"
+          >+</button>
+        </div>
+
         <form action="/search" method="get" class="relative" id="header-search-form">
           <input
             type="search"
@@ -41,12 +58,31 @@ const currentPath = Astro.url.pathname;
         </form>
       </div>
 
-      <!-- Mobile menu button -->
-      <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-600 hover:text-ldd-green">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
+      <div class="flex items-center gap-2 md:hidden">
+        <!-- Mobile font size controls -->
+        <div class="font-size-controls" role="group" aria-label="Font size controls">
+          <button
+            type="button"
+            class="font-size-btn font-decrease-btn"
+            aria-label="Decrease font size"
+            title="Decrease font size"
+          >−</button>
+          <span class="font-size-label mobile-font-label" aria-live="polite">100%</span>
+          <button
+            type="button"
+            class="font-size-btn font-increase-btn"
+            aria-label="Increase font size"
+            title="Increase font size"
+          >+</button>
+        </div>
+
+        <!-- Mobile menu button -->
+        <button id="mobile-menu-btn" class="p-2 text-gray-600 hover:text-ldd-green">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -98,10 +134,81 @@ const currentPath = Astro.url.pathname;
 </header>
 
 <script>
+  // Mobile menu toggle
   const btn = document.getElementById('mobile-menu-btn');
   const menu = document.getElementById('mobile-menu');
 
   btn?.addEventListener('click', () => {
     menu?.classList.toggle('hidden');
+  });
+
+  // Font size controls
+  const fontSizes = [100, 125, 150, 175, 200];
+  const STORAGE_KEY = 'ldd-font-size';
+
+  function getCurrentSizeIndex() {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const index = fontSizes.indexOf(parseInt(stored, 10));
+      return index >= 0 ? index : 0;
+    }
+    return 0;
+  }
+
+  function applyFontSize(sizePercent) {
+    const html = document.documentElement;
+    // Remove all font size classes
+    fontSizes.forEach(size => {
+      html.classList.remove(`font-size-${size}`);
+    });
+    // Add the current font size class
+    html.classList.add(`font-size-${sizePercent}`);
+    // Update all labels
+    document.querySelectorAll('.font-size-label').forEach(label => {
+      label.textContent = `${sizePercent}%`;
+    });
+    // Update button states
+    updateButtonStates();
+    // Save preference
+    localStorage.setItem(STORAGE_KEY, sizePercent.toString());
+  }
+
+  function updateButtonStates() {
+    const currentIndex = getCurrentSizeIndex();
+
+    document.querySelectorAll('.font-decrease-btn').forEach(btn => {
+      (btn as HTMLButtonElement).disabled = currentIndex === 0;
+    });
+    document.querySelectorAll('.font-increase-btn').forEach(btn => {
+      (btn as HTMLButtonElement).disabled = currentIndex === fontSizes.length - 1;
+    });
+  }
+
+  function initFontSize() {
+    const currentIndex = getCurrentSizeIndex();
+    applyFontSize(fontSizes[currentIndex]);
+  }
+
+  // Initialize on load
+  initFontSize();
+
+  // Event listeners for all decrease buttons
+  document.querySelectorAll('.font-decrease-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const currentIndex = getCurrentSizeIndex();
+      if (currentIndex > 0) {
+        applyFontSize(fontSizes[currentIndex - 1]);
+      }
+    });
+  });
+
+  // Event listeners for all increase buttons
+  document.querySelectorAll('.font-increase-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const currentIndex = getCurrentSizeIndex();
+      if (currentIndex < fontSizes.length - 1) {
+        applyFontSize(fontSizes[currentIndex + 1]);
+      }
+    });
   });
 </script>

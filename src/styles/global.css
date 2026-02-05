@@ -19,14 +19,82 @@
 
 html {
   scroll-behavior: smooth;
+  /* Base font size - modified by font size controls */
+  font-size: 100%;
 }
+
+/* Font size classes for user preference */
+html.font-size-100 { font-size: 100%; }
+html.font-size-125 { font-size: 125%; }
+html.font-size-150 { font-size: 150%; }
+html.font-size-175 { font-size: 175%; }
+html.font-size-200 { font-size: 200%; }
 
 body {
   font-family: var(--font-family-sans);
   color: var(--color-ldd-gray);
   background-color: #fff;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.6;
+}
+
+/* WCAG 1.4.10 Reflow - ensure content reflows at 400% zoom */
+/* Use max-width that scales with font size where appropriate */
+.reflow-container {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+/* Ensure images and media scale properly */
+img, video, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Font size control button styles */
+.font-size-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.font-size-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  color: #374151;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.font-size-btn:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.font-size-btn:focus {
+  outline: 2px solid var(--color-ldd-green);
+  outline-offset: 1px;
+}
+
+.font-size-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.font-size-label {
+  font-size: 0.75rem;
+  color: #6b7280;
+  min-width: 2.5rem;
+  text-align: center;
 }
 
 /* Navigation sidebar styles */
