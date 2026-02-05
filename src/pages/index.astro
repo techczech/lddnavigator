@@ -8,17 +8,35 @@ import { getDifficulty } from '../data/difficulties';
 import {
   PersonStanding,
   Puzzle,
+  Lightbulb,
   Clock,
-  Snail,
-  EyeOff,
+  Turtle,
+  BookX,
   FileQuestion,
-  X,
-  Angry,
+  CircleSlash,
+  Frown,
   PlusCircle,
   ChevronRight,
+  EyeOff,
+  AlertTriangle,
+  Scale,
+  BrainCog,
 } from '@lucide/astro';
 
 const featuredBehaviours = behaviours.slice(0, 6);
+
+// Map behaviour IDs to icon names for rendering
+const behaviourIconMap: Record<string, string> = {
+  'always-late': 'clock',
+  'slow-reader': 'turtle',
+  'avoids-reading': 'book-x',
+  'cant-follow-instructions': 'file-question',
+  'misunderstands-banter': 'circle-slash',
+  'unusual-eye-contact': 'eye-off',
+  'anxious-about-changes': 'alert-triangle',
+  'pedantic-about-rules': 'scale',
+  'cant-concentrate': 'brain-cog',
+};
 
 // Build data for client-side
 const behavioursData = featuredBehaviours.map(b => ({
@@ -105,7 +123,7 @@ const behavioursData = featuredBehaviours.map(b => ({
             <!-- Strategies -->
             <div class="flex gap-4">
               <div class="flex-shrink-0 w-16">
-                <Puzzle class="w-12 h-12 text-ldd-gray-dark" />
+                <Lightbulb class="w-12 h-12 text-ldd-gray-dark" />
               </div>
               <div>
                 <h3 class="font-bold text-lg text-ldd-gray-dark mb-1">Strategies</h3>
@@ -121,21 +139,32 @@ const behavioursData = featuredBehaviours.map(b => ({
           <!-- Right: Behaviour list -->
           <div class="lg:col-span-2 bg-white border-l border-gray-200">
             <div class="space-y-0" id="behaviour-list">
-              {featuredBehaviours.map((behaviour, index) => (
-                <button
-                  type="button"
-                  data-behaviour-id={behaviour.id}
-                  class:list={[
-                    'behaviour-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all text-left',
-                    index === 0
-                      ? 'bg-white text-ldd-gray-dark border-b border-gray-200 active'
-                      : 'bg-ldd-blue text-white border-b border-ldd-blue-dark/20 hover:brightness-110',
-                  ]}
-                >
-                  <Clock class="w-5 h-5 flex-shrink-0" />
-                  <span class="flex-1">{behaviour.title}</span>
-                </button>
-              ))}
+              {featuredBehaviours.map((behaviour, index) => {
+                const iconName = behaviourIconMap[behaviour.id] || 'clock';
+                return (
+                  <button
+                    type="button"
+                    data-behaviour-id={behaviour.id}
+                    class:list={[
+                      'behaviour-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all text-left',
+                      index === 0
+                        ? 'bg-white text-ldd-gray-dark border-b border-gray-200 active'
+                        : 'bg-ldd-blue text-white border-b border-ldd-blue-dark/20 hover:brightness-110',
+                    ]}
+                  >
+                    {iconName === 'clock' && <Clock class="w-5 h-5 flex-shrink-0" />}
+                    {iconName === 'turtle' && <Turtle class="w-5 h-5 flex-shrink-0" />}
+                    {iconName === 'book-x' && <BookX class="w-5 h-5 flex-shrink-0" />}
+                    {iconName === 'file-question' && <FileQuestion class="w-5 h-5 flex-shrink-0" />}
+                    {iconName === 'circle-slash' && <CircleSlash class="w-5 h-5 flex-shrink-0" />}
+                    {iconName === 'eye-off' && <EyeOff class="w-5 h-5 flex-shrink-0" />}
+                    {iconName === 'alert-triangle' && <AlertTriangle class="w-5 h-5 flex-shrink-0" />}
+                    {iconName === 'scale' && <Scale class="w-5 h-5 flex-shrink-0" />}
+                    {iconName === 'brain-cog' && <BrainCog class="w-5 h-5 flex-shrink-0" />}
+                    <span class="flex-1">{behaviour.title}</span>
+                  </button>
+                );
+              })}
               <a
                 href="/behaviours"
                 class="flex items-center gap-3 px-4 py-3 bg-ldd-green text-white text-sm font-medium transition-all hover:bg-ldd-green-dark"
