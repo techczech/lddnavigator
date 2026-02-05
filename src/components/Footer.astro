@@ -11,25 +11,27 @@ const strategiesLinks = [
   { href: '/strategies/easy-read', label: 'Easy read materials' },
   { href: '/strategies/visual-supports', label: 'Visual supports' },
   { href: '/strategies/extra-time', label: 'Give extra time' },
+  { href: '/strategies/mindmaps', label: 'Mindmaps' },
 ];
 
 const aboutLinks = [
   { href: '/about', label: 'About the site' },
   { href: '/resources', label: 'Resources' },
-  { href: '/about#partners', label: 'Partners' },
+  { href: '/behaviours', label: 'Behaviours' },
+  { href: '/about#partners', label: 'Original Partners' },
 ];
 ---
 
-<footer class="bg-ldd-gray-dark text-white mt-auto">
-  <div class="max-w-7xl mx-auto px-4 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<footer class="bg-ldd-footer text-white mt-auto">
+  <div class="max-w-5xl mx-auto px-4 py-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
       <!-- Difficulties -->
       <div>
-        <h3 class="text-lg font-semibold mb-4">Difficulties</h3>
-        <ul class="space-y-2">
+        <h3 class="text-sm font-semibold mb-3">Difficulties</h3>
+        <ul class="space-y-1.5">
           {difficultiesLinks.map(link => (
             <li>
-              <a href={link.href} class="text-gray-300 hover:text-white transition-colors">
+              <a href={link.href} class="text-xs text-gray-300 hover:text-white transition-colors">
                 {link.label}
               </a>
             </li>
@@ -39,11 +41,11 @@ const aboutLinks = [
 
       <!-- Strategies -->
       <div>
-        <h3 class="text-lg font-semibold mb-4">Strategies</h3>
-        <ul class="space-y-2">
+        <h3 class="text-sm font-semibold mb-3">Strategies</h3>
+        <ul class="space-y-1.5">
           {strategiesLinks.map(link => (
             <li>
-              <a href={link.href} class="text-gray-300 hover:text-white transition-colors">
+              <a href={link.href} class="text-xs text-gray-300 hover:text-white transition-colors">
                 {link.label}
               </a>
             </li>
@@ -53,11 +55,11 @@ const aboutLinks = [
 
       <!-- About -->
       <div>
-        <h3 class="text-lg font-semibold mb-4">About</h3>
-        <ul class="space-y-2">
+        <h3 class="text-sm font-semibold mb-3">About</h3>
+        <ul class="space-y-1.5">
           {aboutLinks.map(link => (
             <li>
-              <a href={link.href} class="text-gray-300 hover:text-white transition-colors">
+              <a href={link.href} class="text-xs text-gray-300 hover:text-white transition-colors">
                 {link.label}
               </a>
             </li>
@@ -65,23 +67,28 @@ const aboutLinks = [
         </ul>
       </div>
 
-      <!-- Supported by -->
+      <!-- Social & Supported by -->
       <div>
-        <h3 class="text-lg font-semibold mb-4">Supported by</h3>
-        <div class="space-y-4">
-          <div class="bg-gray-500/30 rounded p-4 text-sm text-gray-300">
+        <h3 class="text-sm font-semibold mb-3">Recreation</h3>
+        <p class="text-xs text-gray-300 mb-4">
+          Recreated by <a href="https://dominiklukes.net" class="text-gray-200 hover:text-white underline" target="_blank" rel="noopener noreferrer">Dominik Lukeš</a> using Claude Code
+        </p>
+
+        <h3 class="text-sm font-semibold mb-3">Original Partners</h3>
+        <div class="space-y-2">
+          <div class="bg-gray-500/50 rounded px-3 py-2 text-xs text-gray-300">
             Dyslexia Action
           </div>
-          <div class="bg-gray-500/30 rounded p-4 text-sm text-gray-300">
+          <div class="bg-gray-500/50 rounded px-3 py-2 text-xs text-gray-300">
             National Autistic Society
           </div>
         </div>
       </div>
     </div>
 
-    <div class="border-t border-gray-600 mt-8 pt-8 text-center text-gray-400 text-sm">
+    <div class="border-t border-gray-500 mt-6 pt-4 text-center text-gray-400 text-xs">
       <p>LDD Navigator - Learning Difficulties and Disabilities in the Justice System</p>
-      <p class="mt-2">A resource for prison staff and professionals</p>
+      <p class="mt-1">Original site © 2013 | Released under CC BY license | This recreation © 2025</p>
     </div>
   </div>
 </footer>
