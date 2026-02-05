@@ -18,3 +18,9 @@ Thumbs.db
 
 # Astro
 .astro/
+
+# Source files (original design documents)
+sourcefiles/
+*.docx
+*.jpg
+*.jpeg
