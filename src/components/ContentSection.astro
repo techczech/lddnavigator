@@ -1,4 +1,6 @@
 ---
+import { CircleHelp, Eye, ThumbsUp, Users, Info, Footprints, Puzzle, FolderOpen } from '@lucide/astro';
+
 interface Props {
   title: string;
   icon?: string;
@@ -8,16 +10,23 @@ interface Props {
 const { title, icon, id } = Astro.props;
 ---
 
-<section id={id} class="mb-8">
-  <div class="flex items-start gap-4">
+<section id={id} class="mb-10">
+  <div class="flex items-start gap-6">
     {icon && (
-      <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center text-4xl text-ldd-gray-dark">
-        <span>{icon}</span>
+      <div class="flex-shrink-0 w-24 h-24 flex items-center justify-center text-ldd-gray-dark">
+        {icon === 'help' && <CircleHelp class="w-20 h-20 stroke-[1.2]" />}
+        {icon === 'eye' && <Eye class="w-20 h-20 stroke-[1.2]" />}
+        {icon === 'thumbs-up' && <ThumbsUp class="w-20 h-20 stroke-[1.2]" />}
+        {icon === 'users' && <Users class="w-20 h-20 stroke-[1.2]" />}
+        {icon === 'info' && <Info class="w-20 h-20 stroke-[1.2]" />}
+        {icon === 'footprints' && <Footprints class="w-20 h-20 stroke-[1.2]" />}
+        {icon === 'puzzle' && <Puzzle class="w-20 h-20 stroke-[1.2]" />}
+        {icon === 'folder' && <FolderOpen class="w-20 h-20 stroke-[1.2]" />}
       </div>
     )}
     <div class="flex-1">
       <h2 class="text-xl font-semibold text-ldd-gray-dark mb-3">{title}</h2>
-      <div class="text-gray-600 leading-relaxed space-y-4">
+      <div class="text-gray-600 text-sm leading-relaxed space-y-3">
         <slot />
       </div>
     </div>

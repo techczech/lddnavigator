@@ -1,4 +1,6 @@
 ---
+import { CircleHelp, Eye, ThumbsUp, Users, Info, Footprints, Puzzle, Lightbulb, FolderOpen } from '@lucide/astro';
+
 interface NavItem {
   label: string;
   href: string;
@@ -13,25 +15,50 @@ interface Props {
 
 const { items } = Astro.props;
 
-const colorClasses = {
-  orange: 'bg-ldd-orange hover:bg-ldd-orange-dark',
-  green: 'bg-ldd-green hover:bg-ldd-green-dark',
-  blue: 'bg-ldd-blue hover:bg-ldd-blue-dark',
-  gray: 'bg-gray-400 hover:bg-gray-500',
+const bgClasses = {
+  orange: 'bg-ldd-orange',
+  green: 'bg-ldd-green',
+  blue: 'bg-ldd-blue',
+  gray: 'bg-gray-500',
+};
+
+const activeBgClasses = {
+  orange: 'bg-ldd-orange/20 text-ldd-orange',
+  green: 'bg-ldd-green/20 text-ldd-green',
+  blue: 'bg-ldd-blue/20 text-ldd-blue',
+  gray: 'bg-gray-200 text-gray-600',
 };
 ---
 
-<nav class="nav-sidebar space-y-2">
+<nav class="nav-sidebar space-y-1.5">
   {items.map(item => (
     <a
       href={item.href}
       class:list={[
-        'flex items-center gap-3 px-4 py-3 rounded text-white text-sm font-medium transition-all',
-        item.active ? colorClasses[item.color || 'gray'] + ' ring-2 ring-offset-2 ring-gray-400' : colorClasses[item.color || 'gray'],
+        'flex items-center gap-0 rounded-sm text-sm font-medium transition-all overflow-hidden',
+        item.active ? activeBgClasses[item.color || 'gray'] : '',
       ]}
     >
-      {item.icon && <span>{item.icon}</span>}
-      <span>{item.label}</span>
+      <span class:list={[
+        'flex items-center justify-center w-10 h-10 text-white',
+        bgClasses[item.color || 'gray'],
+      ]}>
+        {item.icon === 'help' && <CircleHelp class="w-5 h-5" />}
+        {item.icon === 'eye' && <Eye class="w-5 h-5" />}
+        {item.icon === 'thumbs-up' && <ThumbsUp class="w-5 h-5" />}
+        {item.icon === 'users' && <Users class="w-5 h-5" />}
+        {item.icon === 'info' && <Info class="w-5 h-5" />}
+        {item.icon === 'footprints' && <Footprints class="w-5 h-5" />}
+        {item.icon === 'puzzle' && <Puzzle class="w-5 h-5" />}
+        {item.icon === 'lightbulb' && <Lightbulb class="w-5 h-5" />}
+        {item.icon === 'folder' && <FolderOpen class="w-5 h-5" />}
+      </span>
+      <span class:list={[
+        'flex-1 px-3 py-2.5',
+        item.active ? '' : 'bg-gray-500 text-white',
+      ]}>
+        {item.label}
+      </span>
     </a>
   ))}
 </nav>

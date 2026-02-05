@@ -21,47 +21,49 @@ if (!behaviour) {
 }
 
 const sidebarItems = [
-  { label: 'Behaviour', href: '#behaviour', icon: '🔄', color: 'blue' as const, active: true },
-  { label: 'Difficulty', href: '#difficulty', icon: '🧩', color: 'green' as const },
-  { label: 'Strategies', href: '#strategies', icon: '💡', color: 'orange' as const },
+  { label: 'Behaviour', href: '#behaviour', icon: 'footprints', color: 'green' as const, active: true },
+  { label: 'Difficulty', href: '#difficulty', icon: 'puzzle', color: 'blue' as const },
+  { label: 'Strategies', href: '#strategies', icon: 'lightbulb', color: 'orange' as const },
 ];
 ---
 
 <Layout title={behaviour.title}>
   <PageHeader
     title={behaviour.title}
-    icon="⏰"
-    color="blue"
+    icon="clock"
+    color="orange"
     breadcrumbs={[
       { label: 'Home', href: '/' },
-      { label: 'Behaviours', href: '/behaviours' },
-      { label: behaviour.title },
+      { label: 'Landing Page' },
     ]}
   />
 
-  <section class="py-12">
-    <div class="max-w-7xl mx-auto px-4">
-      <div class="grid lg:grid-cols-4 gap-8">
+  <section class="py-8">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="grid lg:grid-cols-3 gap-8">
         <!-- Main content -->
-        <div class="lg:col-span-3 space-y-12">
-          <ContentSection title="Behaviour" icon="🔄" id="behaviour">
+        <div class="lg:col-span-2 space-y-8">
+          <ContentSection title="Behaviour" icon="footprints" id="behaviour">
+            <p class="font-medium text-ldd-gray-dark mb-3">Your client is {behaviour.title.toLowerCase()} no matter how important.</p>
             {behaviour.description.split('\n\n').map(para => (
               <p>{para}</p>
             ))}
           </ContentSection>
 
-          <ContentSection title="Difficulty" icon="🧩" id="difficulty">
-            <p class="mb-6">{behaviour.difficulty}</p>
+          <ContentSection title="Difficulty" icon="puzzle" id="difficulty">
+            <p class="mb-4">Your client may have problems with reading notes, sequencing, understanding time or following instructions.</p>
+            <p class="mb-4">{behaviour.difficulty}</p>
 
             <h3 class="font-semibold text-ldd-gray-dark mb-3">Related difficulties</h3>
-            <div class="flex flex-wrap gap-2">
+            <div class="space-y-2">
               {behaviour.relatedDifficulties.map(diffId => {
                 const difficulty = getDifficulty(diffId);
                 return difficulty && (
                   <a
                     href={`/difficulties/${diffId}`}
-                    class="bg-ldd-green text-white px-3 py-2 rounded hover:bg-ldd-green-dark transition-colors"
+                    class="flex items-center gap-2 text-ldd-blue hover:underline text-sm"
                   >
+                    <span class="text-ldd-orange">⏰</span>
                     {difficulty.title}
                   </a>
                 );
@@ -69,19 +71,35 @@ const sidebarItems = [
             </div>
           </ContentSection>
 
-          <ContentSection title="Strategies" icon="💡" id="strategies">
-            <p class="mb-6">There are many strategies you can use. Not all of them will work with all people. You should focus on helping your client identify the right strategies that will help them compensate for their learning difficulty.</p>
+          <ContentSection title="Strategies" icon="puzzle" id="strategies">
+            <p class="text-ldd-orange font-medium mb-3">
+              {behaviour.strategies.slice(0, 3).map((stratId, i) => {
+                const strategy = getStrategy(stratId);
+                return strategy && (
+                  <>{i > 0 && ', '}<a href={`/strategies/${stratId}`} class="hover:underline">{strategy.title}</a></>
+                );
+              })}.
+            </p>
+            <p class="mb-4">Other strategies include:</p>
+            <ul class="list-disc pl-6 space-y-1 mb-6">
+              {behaviour.strategies.map(stratId => {
+                const strategy = getStrategy(stratId);
+                return strategy && (
+                  <li>{strategy.title}</li>
+                );
+              })}
+            </ul>
 
-            <div class="grid sm:grid-cols-2 gap-4">
+            <div class="grid sm:grid-cols-2 gap-3">
               {behaviour.strategies.map(strategyId => {
                 const strategy = getStrategy(strategyId);
                 return strategy && (
                   <a
                     href={`/strategies/${strategyId}`}
-                    class="block bg-white border border-gray-200 rounded p-4 hover:border-ldd-orange hover:shadow-sm transition-all"
+                    class="block bg-white border border-gray-200 rounded p-3 hover:border-ldd-orange hover:shadow-sm transition-all text-sm"
                   >
                     <h3 class="font-semibold text-ldd-gray-dark mb-1">{strategy.title}</h3>
-                    <p class="text-sm text-gray-600 line-clamp-2">{strategy.description}</p>
+                    <p class="text-xs text-gray-600 line-clamp-2">{strategy.description}</p>
                   </a>
                 );
               })}

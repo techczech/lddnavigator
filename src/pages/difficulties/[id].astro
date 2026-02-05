@@ -21,40 +21,46 @@ if (!difficulty) {
 }
 
 const sidebarItems = [
-  { label: 'What is it?', href: '#what-is-it', icon: '❓', color: 'orange' as const, active: true },
-  { label: 'What to look out for', href: '#look-out-for', icon: '👁️', color: 'blue' as const },
-  { label: 'What to do', href: '#what-to-do', icon: '👍', color: 'green' as const },
-  { label: 'Who can help', href: '#who-can-help', icon: '🤝', color: 'gray' as const },
-  { label: 'FAQs', href: '#faqs', icon: 'ℹ️', color: 'gray' as const },
+  { label: 'What is it?', href: '#what-is-it', icon: 'help', color: 'orange' as const, active: true },
+  { label: 'What to look out for', href: '#look-out-for', icon: 'eye', color: 'blue' as const },
+  { label: 'What to do', href: '#what-to-do', icon: 'thumbs-up', color: 'green' as const },
+  { label: 'Who can help', href: '#who-can-help', icon: 'users', color: 'gray' as const },
+  { label: 'FAQs', href: '#faqs', icon: 'info', color: 'gray' as const },
 ];
 ---
 
 <Layout title={difficulty.title}>
   <PageHeader
     title={difficulty.title}
-    icon="🧩"
-    color="green"
+    icon="file-text"
+    color="orange"
     breadcrumbs={[
       { label: 'Home', href: '/' },
-      { label: 'Difficulties', href: '/difficulties' },
-      { label: difficulty.title },
+      { label: 'Landing Page' },
     ]}
   />
 
-  <section class="py-12">
-    <div class="max-w-7xl mx-auto px-4">
-      <div class="grid lg:grid-cols-4 gap-8">
+  <section class="py-8">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="grid lg:grid-cols-3 gap-8">
         <!-- Main content -->
-        <div class="lg:col-span-3 space-y-12">
-          <ContentSection title="What is it?" icon="❓" id="what-is-it">
+        <div class="lg:col-span-2 space-y-8">
+          <ContentSection title="What is it?" icon="help" id="what-is-it">
             {difficulty.whatIsIt.split('\n\n').map(para => (
               <p>{para}</p>
             ))}
+            <p class="mt-3">People with {difficulty.title.toLowerCase()} often also find it hard to:</p>
+            <ul class="list-disc pl-6 space-y-1 mt-2">
+              <li>quickly recall words</li>
+              <li>follow directions that are given in large chunks instead of step by step</li>
+            </ul>
+            <p class="mt-3">This means that they will struggle in school. {difficulty.title} often <strong>co-occurs</strong> with other difficulties such as ADHD or dyspraxia.</p>
+            <p class="mt-3">It is also possible for a person with autism to have {difficulty.title.toLowerCase()}.</p>
           </ContentSection>
 
-          <ContentSection title="What to look out for" icon="👁️" id="look-out-for">
-            <p class="mb-4">{difficulty.title} is a <strong>hidden disability</strong> and cannot be reliably determined without a set of assessments performed by a certified assessor. However, many of the signs below may indicate {difficulty.title.toLowerCase()}. And even if the person is not diagnosed, they can still benefit from the same strategies.</p>
-            <p class="font-medium mb-2">Look out for:</p>
+          <ContentSection title="What to look out for" icon="eye" id="look-out-for">
+            <p>{difficulty.title} is a <strong>hidden disability</strong> and cannot be reliably determined without a set of assessments performed by a certified assessor. However, many of the signs below may indicate {difficulty.title.toLowerCase()}. And even if the person is not {difficulty.title.toLowerCase()}, they can still benefit from the same strategies.</p>
+            <p class="font-medium mt-4 mb-2">Look out for:</p>
             <ul class="list-disc pl-6 space-y-1">
               {difficulty.whatToLookOutFor.map(item => (
                 <li>{item}</li>
@@ -62,23 +68,27 @@ const sidebarItems = [
             </ul>
           </ContentSection>
 
-          <ContentSection title="What to do" icon="👍" id="what-to-do">
-            <p class="text-ldd-orange font-medium mb-4">{difficulty.whatToDo.slice(0, 3).join(', ')}.</p>
-            <p class="mb-4">Other strategies include:</p>
-            <ul class="list-disc pl-6 space-y-1 mb-6">
+          <ContentSection title="What to do" icon="thumbs-up" id="what-to-do">
+            <p class="text-ldd-orange font-medium">
+              {difficulty.whatToDo.slice(0, 3).map((item, i) => (
+                <>{i > 0 && ', '}<a href={`/strategies/${item.toLowerCase().replace(/\s+/g, '-')}`} class="hover:underline">{item}</a></>
+              ))}.
+            </p>
+            <p class="mt-3">Other strategies include:</p>
+            <ul class="list-disc pl-6 space-y-1 mt-2">
               {difficulty.whatToDo.map(item => (
                 <li>{item}</li>
               ))}
             </ul>
 
-            <h3 class="font-semibold text-ldd-gray-dark mb-3">Related strategies</h3>
+            <h3 class="font-semibold text-ldd-gray-dark mt-6 mb-3">Related strategies</h3>
             <div class="flex flex-wrap gap-2">
               {difficulty.relatedStrategies.map(strategyId => {
                 const strategy = getStrategy(strategyId);
                 return strategy && (
                   <a
                     href={`/strategies/${strategyId}`}
-                    class="bg-ldd-green text-white px-3 py-1 rounded text-sm hover:bg-ldd-green-dark transition-colors"
+                    class="bg-ldd-green text-white px-3 py-1 rounded text-xs hover:bg-ldd-green-dark transition-colors"
                   >
                     {strategy.title}
                   </a>
@@ -87,20 +97,20 @@ const sidebarItems = [
             </div>
           </ContentSection>
 
-          <ContentSection title="Who can help" icon="🤝" id="who-can-help">
+          <ContentSection title="Who can help" icon="users" id="who-can-help">
             {difficulty.resources && difficulty.resources.length > 0 ? (
-              <ul class="space-y-3">
+              <ul class="space-y-2">
                 {difficulty.resources.map(resource => (
-                  <li class="flex items-center gap-3">
-                    <span class="text-ldd-blue">
+                  <li class="flex items-center gap-2">
+                    <span class="text-ldd-blue text-sm">
                       {resource.type === 'webpage' ? '🌐' : '📄'}
                     </span>
                     {resource.url ? (
-                      <a href={resource.url} target="_blank" rel="noopener noreferrer" class="text-ldd-blue hover:underline">
+                      <a href={resource.url} target="_blank" rel="noopener noreferrer" class="text-ldd-blue hover:underline text-sm">
                         {resource.title}
                       </a>
                     ) : (
-                      <span>{resource.title}</span>
+                      <span class="text-sm">{resource.title}</span>
                     )}
                   </li>
                 ))}
@@ -111,11 +121,11 @@ const sidebarItems = [
           </ContentSection>
 
           {difficulty.faqs && difficulty.faqs.length > 0 && (
-            <ContentSection title="FAQs" icon="ℹ️" id="faqs">
-              <div class="space-y-6">
+            <ContentSection title="FAQs" icon="info" id="faqs">
+              <div class="space-y-4">
                 {difficulty.faqs.map(faq => (
                   <div>
-                    <h4 class="font-semibold text-ldd-gray-dark mb-2">{faq.question}</h4>
+                    <h4 class="font-semibold text-ldd-gray-dark mb-1">{faq.question}</h4>
                     <p>{faq.answer}</p>
                   </div>
                 ))}
@@ -125,17 +135,17 @@ const sidebarItems = [
 
           <!-- Related behaviours -->
           <div>
-            <h2 class="text-xl font-semibold text-ldd-gray-dark mb-4">Related behaviours</h2>
-            <div class="grid sm:grid-cols-2 gap-4">
+            <h2 class="text-lg font-semibold text-ldd-gray-dark mb-3">Related behaviours</h2>
+            <div class="grid sm:grid-cols-2 gap-3">
               {difficulty.relatedBehaviours.map(behaviourId => {
                 const behaviour = getBehaviour(behaviourId);
                 return behaviour && (
                   <a
                     href={`/behaviours/${behaviourId}`}
-                    class="block bg-white border border-gray-200 rounded p-4 hover:border-ldd-blue hover:shadow-sm transition-all"
+                    class="block bg-white border border-gray-200 rounded p-3 hover:border-ldd-blue hover:shadow-sm transition-all text-sm"
                   >
                     <h3 class="font-semibold text-ldd-gray-dark mb-1">{behaviour.title}</h3>
-                    <p class="text-sm text-gray-600 line-clamp-2">{behaviour.difficulty}</p>
+                    <p class="text-xs text-gray-600 line-clamp-2">{behaviour.difficulty}</p>
                   </a>
                 );
               })}
