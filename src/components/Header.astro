@@ -21,7 +21,7 @@ const currentPath = Astro.url.pathname;
           <span class="text-ldd-gray font-light">LDD</span>
           <span class="text-ldd-green font-normal">Navigator</span>
         </span>
-        <span class="hidden md:block text-xs text-gray-500 border-l border-gray-300 pl-2 ml-1 leading-tight">
+        <span class="hidden md:block text-sm text-gray-500 border-l border-gray-300 pl-2 ml-1 leading-tight">
           Learning Difficulties and<br />Disabilities in the Justice System
         </span>
       </a>
@@ -49,7 +49,7 @@ const currentPath = Astro.url.pathname;
             type="search"
             name="q"
             placeholder="Search..."
-            class="w-48 px-3 py-1.5 text-sm border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-ldd-green focus:border-ldd-green"
+            class="w-48 px-3 py-1.5 text-base border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-ldd-green focus:border-ldd-green"
             id="header-search-input"
           />
           <button type="submit" class="absolute right-1 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-ldd-green bg-gray-100 rounded-sm">
@@ -95,7 +95,7 @@ const currentPath = Astro.url.pathname;
             <a
               href={item.href}
               class:list={[
-                'block px-4 py-2.5 text-white text-sm font-medium transition-colors',
+                'block px-4 py-2.5 text-white text-base font-medium transition-colors',
                 currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href))
                   ? 'bg-white/20'
                   : 'hover:bg-white/10'
@@ -118,7 +118,7 @@ const currentPath = Astro.url.pathname;
             <a
               href={item.href}
               class:list={[
-                'block px-4 py-2 text-white text-sm font-medium rounded transition-colors',
+                'block px-4 py-2 text-white text-base font-medium rounded transition-colors',
                 currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href))
                   ? 'bg-white/20'
                   : 'hover:bg-white/10'
