@@ -1,0 +1,151 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { difficulties } from '../data/difficulties';
+import { behaviours } from '../data/behaviours';
+import { strategies } from '../data/strategies';
+
+// Create searchable data
+const searchData = [
+  ...difficulties.map(d => ({
+    type: 'difficulty',
+    id: d.id,
+    title: d.title,
+    description: d.shortDescription || d.whatIsIt,
+    url: `/difficulties/${d.id}`,
+  })),
+  ...behaviours.map(b => ({
+    type: 'behaviour',
+    id: b.id,
+    title: b.title,
+    description: b.description.split('\n\n')[0],
+    url: `/behaviours/${b.id}`,
+  })),
+  ...strategies.map(s => ({
+    type: 'strategy',
+    id: s.id,
+    title: s.title,
+    description: s.description,
+    url: `/strategies/${s.id}`,
+  })),
+];
+---
+
+<Layout title="Search">
+  <PageHeader
+    title="Search"
+    icon="help"
+    color="green"
+    breadcrumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'Search' },
+    ]}
+  />
+
+  <section class="py-8">
+    <div class="max-w-4xl mx-auto px-4">
+      <!-- Search input -->
+      <div class="mb-8">
+        <div class="flex gap-2">
+          <input
+            type="search"
+            id="search-input"
+            placeholder="Search for difficulties, behaviours, or strategies..."
+            class="flex-1 px-4 py-3 text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-ldd-green focus:border-ldd-green"
+            autofocus
+          />
+          <button
+            id="search-btn"
+            class="bg-ldd-green text-white px-6 py-3 rounded font-medium hover:bg-ldd-green-dark transition-colors"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div id="search-results">
+        <p class="text-gray-500">Enter a search term to find relevant information.</p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script define:vars={{ searchData }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('search-input');
+    const searchBtn = document.getElementById('search-btn');
+    const resultsDiv = document.getElementById('search-results');
+
+    // Get query from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialQuery = urlParams.get('q');
+    if (initialQuery && searchInput) {
+      searchInput.value = initialQuery;
+      performSearch(initialQuery);
+    }
+
+    function performSearch(query) {
+      if (!query || query.trim().length < 2) {
+        resultsDiv.innerHTML = '<p class="text-gray-500">Please enter at least 2 characters to search.</p>';
+        return;
+      }
+
+      const lowerQuery = query.toLowerCase();
+      const results = searchData.filter(item =>
+        item.title.toLowerCase().includes(lowerQuery) ||
+        item.description.toLowerCase().includes(lowerQuery)
+      );
+
+      if (results.length === 0) {
+        resultsDiv.innerHTML = `<p class="text-gray-500">No results found for "${query}".</p>`;
+        return;
+      }
+
+      const typeLabels = {
+        difficulty: { label: 'Difficulty', color: 'bg-ldd-green' },
+        behaviour: { label: 'Behaviour', color: 'bg-ldd-orange' },
+        strategy: { label: 'Strategy', color: 'bg-ldd-blue' },
+      };
+
+      const html = `
+        <p class="text-gray-600 mb-4">Found ${results.length} result${results.length > 1 ? 's' : ''} for "${query}"</p>
+        <div class="space-y-4">
+          ${results.map(item => {
+            const typeInfo = typeLabels[item.type];
+            return `
+              <a href="${item.url}" class="block bg-white border border-gray-200 rounded-lg p-4 hover:border-ldd-green hover:shadow-sm transition-all">
+                <div class="flex items-start gap-3">
+                  <span class="${typeInfo.color} text-white text-xs px-2 py-1 rounded">${typeInfo.label}</span>
+                  <div class="flex-1">
+                    <h3 class="font-semibold text-ldd-gray-dark">${item.title}</h3>
+                    <p class="text-sm text-gray-600 mt-1 line-clamp-2">${item.description}</p>
+                  </div>
+                </div>
+              </a>
+            `;
+          }).join('')}
+        </div>
+      `;
+      resultsDiv.innerHTML = html;
+    }
+
+    function handleSearch() {
+      const query = searchInput?.value || '';
+      if (query.trim()) {
+        // Update URL
+        const url = new URL(window.location.href);
+        url.searchParams.set('q', query);
+        window.history.pushState({}, '', url);
+        performSearch(query);
+      }
+    }
+
+    searchBtn?.addEventListener('click', handleSearch);
+    searchInput?.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        handleSearch();
+      }
+    });
+  });
+</script>

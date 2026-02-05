@@ -13,7 +13,7 @@ const currentPath = Astro.url.pathname;
 ---
 
 <header class="bg-white border-b border-gray-200">
-  <div class="max-w-5xl mx-auto px-4">
+  <div class="max-w-4xl mx-auto px-4">
     <!-- Top bar -->
     <div class="flex items-center justify-between py-3">
       <a href="/" class="flex items-center gap-2">
@@ -27,16 +27,18 @@ const currentPath = Astro.url.pathname;
       </a>
 
       <div class="hidden md:flex items-center">
-        <div class="relative">
+        <form action="/search" method="get" class="relative" id="header-search-form">
           <input
             type="search"
-            placeholder=""
+            name="q"
+            placeholder="Search..."
             class="w-48 px-3 py-1.5 text-sm border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-ldd-green focus:border-ldd-green"
+            id="header-search-input"
           />
-          <button class="absolute right-1 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-ldd-green bg-gray-100 rounded-sm">
+          <button type="submit" class="absolute right-1 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-ldd-green bg-gray-100 rounded-sm">
             <Search class="h-4 w-4" />
           </button>
-        </div>
+        </form>
       </div>
 
       <!-- Mobile menu button -->
@@ -50,7 +52,7 @@ const currentPath = Astro.url.pathname;
 
   <!-- Navigation -->
   <nav class="bg-ldd-green">
-    <div class="max-w-5xl mx-auto px-4">
+    <div class="max-w-4xl mx-auto px-4">
       <ul class="hidden md:flex items-center">
         {navItems.map((item, index) => (
           <li>
@@ -73,7 +75,7 @@ const currentPath = Astro.url.pathname;
 
   <!-- Mobile navigation -->
   <nav id="mobile-menu" class="hidden md:hidden bg-ldd-green">
-    <div class="max-w-5xl mx-auto px-4 py-2">
+    <div class="max-w-4xl mx-auto px-4 py-2">
       <ul class="space-y-1">
         {navItems.map(item => (
           <li>

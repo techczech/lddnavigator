@@ -69,17 +69,17 @@ const didYouKnowTips = [
 
   <!-- Did You Know -->
   <section class="bg-white">
-    <div class="max-w-5xl mx-auto px-4">
+    <div class="max-w-4xl mx-auto px-4">
       <div class="bg-ldd-orange text-white py-4 px-5 flex items-center gap-4">
         <button
           id="prev-tip-btn"
           class="text-white/60 hover:text-white transition-colors"
           title="Previous tip"
         >
-          <span class="text-lg">◀</span>
+          <span class="text-xl">◀</span>
         </button>
-        <div class="font-bold text-base whitespace-nowrap border-r border-white/40 pr-4">DID YOU<br/>KNOW?</div>
-        <p class="text-sm leading-relaxed flex-1" id="tip-text">
+        <div class="font-bold text-lg whitespace-nowrap border-r border-white/40 pr-4">DID YOU<br/>KNOW?</div>
+        <p class="text-base leading-relaxed flex-1" id="tip-text">
           {didYouKnowTips[0]}
         </p>
         <button
@@ -87,7 +87,7 @@ const didYouKnowTips = [
           class="text-white/60 hover:text-white transition-colors"
           title="Next tip"
         >
-          <span class="text-lg">▶</span>
+          <span class="text-xl">▶</span>
         </button>
       </div>
     </div>
@@ -95,46 +95,46 @@ const didYouKnowTips = [
 
   <!-- Behaviour Navigator -->
   <section class="py-6 bg-white">
-    <div class="max-w-5xl mx-auto px-4">
+    <div class="max-w-4xl mx-auto px-4">
       <div class="border border-gray-300 rounded overflow-hidden">
         <div class="grid lg:grid-cols-5">
           <!-- Left: Behaviour/Difficulty/Strategies -->
-          <div class="lg:col-span-3 p-5 space-y-5 border-r border-gray-300" id="behaviour-details">
+          <div class="lg:col-span-3 p-6 space-y-6 border-r border-gray-300" id="behaviour-details">
             <!-- Behaviour -->
-            <div class="flex gap-3">
+            <div class="flex gap-4">
               <div class="flex-shrink-0">
-                <UserRound class="w-10 h-10 text-ldd-gray-dark stroke-[1.5]" />
+                <UserRound class="w-12 h-12 text-ldd-gray-dark stroke-[1.5]" />
               </div>
               <div class="flex-1">
-                <h3 class="font-bold text-sm text-ldd-gray-dark mb-1">Behaviour</h3>
-                <p class="text-xs text-gray-600" id="behaviour-text">Your client is always late for meetings no matter how important.</p>
-                <p class="text-xs text-gray-500 mt-1" id="behaviour-detail">Sometimes you feel like the client does not respect your time or does not care. You have told them not to be late, but they always are.</p>
+                <h3 class="font-bold text-base text-ldd-gray-dark mb-1">Behaviour</h3>
+                <p class="text-sm text-gray-600" id="behaviour-text">Your client is always late for meetings no matter how important.</p>
+                <p class="text-sm text-gray-500 mt-1" id="behaviour-detail">Sometimes you feel like the client does not respect your time or does not care. You have told them not to be late, but they always are.</p>
               </div>
             </div>
 
             <!-- Difficulty -->
-            <div class="flex gap-3">
+            <div class="flex gap-4">
               <div class="flex-shrink-0">
-                <Puzzle class="w-10 h-10 text-ldd-gray-dark stroke-[1.5]" />
+                <Puzzle class="w-12 h-12 text-ldd-gray-dark stroke-[1.5]" />
               </div>
               <div class="flex-1">
-                <h3 class="font-bold text-sm text-ldd-gray-dark mb-1">Difficulty</h3>
-                <p class="text-xs text-gray-600" id="difficulty-text">Your client may have problems with reading notes, sequencing, understanding time or following instructions.</p>
-                <p class="text-xs text-gray-500 mt-1" id="difficulty-detail">This could be a sign of dyslexia, dyspraxia or ADHD.</p>
+                <h3 class="font-bold text-base text-ldd-gray-dark mb-1">Difficulty</h3>
+                <p class="text-sm text-gray-600" id="difficulty-text">Your client may have problems with reading notes, sequencing, understanding time or following instructions.</p>
+                <p class="text-sm text-gray-500 mt-1" id="difficulty-detail">This could be a sign of dyslexia, dyspraxia or ADHD.</p>
               </div>
             </div>
 
             <!-- Strategies -->
-            <div class="flex gap-3">
+            <div class="flex gap-4">
               <div class="flex-shrink-0">
-                <Lightbulb class="w-10 h-10 text-ldd-gray-dark stroke-[1.5]" />
+                <Lightbulb class="w-12 h-12 text-ldd-gray-dark stroke-[1.5]" />
               </div>
               <div class="flex-1">
-                <h3 class="font-bold text-sm text-ldd-gray-dark mb-1">Strategies</h3>
-                <p class="text-xs text-ldd-orange font-medium" id="strategies-text">Written reminders, Colour coded calendars with icons, mnemonic devices.</p>
-                <p class="text-xs text-gray-500 mt-1">There are many strategies you can use. Focus on helping your client identify the right strategies for them.</p>
-                <a href="/strategies" class="inline-flex items-center gap-1 mt-2 bg-ldd-green text-white px-3 py-1 rounded text-xs hover:bg-ldd-green-dark transition-colors">
-                  More strategies <span class="text-[9px]">▶</span>
+                <h3 class="font-bold text-base text-ldd-gray-dark mb-1">Strategies</h3>
+                <p class="text-sm text-ldd-orange font-medium" id="strategies-text">Written reminders, Colour coded calendars with icons, mnemonic devices.</p>
+                <p class="text-sm text-gray-500 mt-1">There are many strategies you can use. Focus on helping your client identify the right strategies for them.</p>
+                <a href="/strategies" class="inline-flex items-center gap-1 mt-3 bg-ldd-green text-white px-4 py-1.5 rounded text-sm hover:bg-ldd-green-dark transition-colors">
+                  More strategies <span class="text-xs">▶</span>
                 </a>
               </div>
             </div>
@@ -149,30 +149,30 @@ const didYouKnowTips = [
                   type="button"
                   data-behaviour-id={behaviour.id}
                   class:list={[
-                    'behaviour-btn w-full flex items-center gap-2 px-3 py-2.5 text-xs font-medium text-left border-b last:border-b-0',
+                    'behaviour-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-left border-b last:border-b-0',
                     index === 0
                       ? 'bg-white text-ldd-gray-dark border-gray-200'
                       : 'bg-ldd-blue text-white border-ldd-blue-dark/30 hover:bg-ldd-blue-dark',
                   ]}
                 >
-                  {iconName === 'clock' && <Clock class="w-4 h-4 flex-shrink-0" />}
-                  {iconName === 'turtle' && <Turtle class="w-4 h-4 flex-shrink-0" />}
-                  {iconName === 'book-x' && <BookX class="w-4 h-4 flex-shrink-0" />}
-                  {iconName === 'file-question' && <FileQuestion class="w-4 h-4 flex-shrink-0" />}
-                  {iconName === 'circle-slash' && <CircleSlash class="w-4 h-4 flex-shrink-0" />}
-                  {iconName === 'eye-off' && <EyeOff class="w-4 h-4 flex-shrink-0" />}
-                  {iconName === 'alert-triangle' && <AlertTriangle class="w-4 h-4 flex-shrink-0" />}
-                  {iconName === 'scale' && <Scale class="w-4 h-4 flex-shrink-0" />}
-                  {iconName === 'brain-cog' && <BrainCog class="w-4 h-4 flex-shrink-0" />}
+                  {iconName === 'clock' && <Clock class="w-5 h-5 flex-shrink-0" />}
+                  {iconName === 'turtle' && <Turtle class="w-5 h-5 flex-shrink-0" />}
+                  {iconName === 'book-x' && <BookX class="w-5 h-5 flex-shrink-0" />}
+                  {iconName === 'file-question' && <FileQuestion class="w-5 h-5 flex-shrink-0" />}
+                  {iconName === 'circle-slash' && <CircleSlash class="w-5 h-5 flex-shrink-0" />}
+                  {iconName === 'eye-off' && <EyeOff class="w-5 h-5 flex-shrink-0" />}
+                  {iconName === 'alert-triangle' && <AlertTriangle class="w-5 h-5 flex-shrink-0" />}
+                  {iconName === 'scale' && <Scale class="w-5 h-5 flex-shrink-0" />}
+                  {iconName === 'brain-cog' && <BrainCog class="w-5 h-5 flex-shrink-0" />}
                   <span>{behaviour.title}</span>
                 </button>
               );
             })}
             <a
               href="/behaviours"
-              class="flex items-center gap-2 px-3 py-2.5 bg-ldd-green text-white text-xs font-medium hover:bg-ldd-green-dark"
+              class="flex items-center gap-3 px-4 py-3 bg-ldd-green text-white text-sm font-medium hover:bg-ldd-green-dark"
             >
-              <PlusCircle class="w-4 h-4" />
+              <PlusCircle class="w-5 h-5" />
               <span>More</span>
             </a>
           </div>
@@ -182,16 +182,16 @@ const didYouKnowTips = [
   </section>
 
   <!-- About This Site -->
-  <section class="py-6 bg-ldd-gray-light">
-    <div class="max-w-5xl mx-auto px-4">
+  <section class="py-8 bg-ldd-gray-light">
+    <div class="max-w-4xl mx-auto px-4">
       <div class="flex gap-4 items-start">
-        <div class="bg-ldd-orange text-white px-3 py-1 rounded text-xs font-semibold whitespace-nowrap">About This Site</div>
+        <div class="bg-ldd-orange text-white px-4 py-1.5 rounded text-sm font-semibold whitespace-nowrap">About This Site</div>
         <div class="flex-1">
-          <p class="text-xs text-gray-600 mb-2">
+          <p class="text-sm text-gray-600 mb-3">
             This website helps you identify behaviours that may indicate a learning difficulty, understand what might be causing them, and find strategies to help. This is a recreation of the original 2013 site, released under a CC BY license.
           </p>
-          <a href="/about" class="inline-flex items-center gap-1 bg-ldd-orange text-white px-3 py-1 rounded text-xs hover:bg-ldd-orange-dark transition-colors">
-            More about this site <span class="text-[9px]">▶</span>
+          <a href="/about" class="inline-flex items-center gap-1 bg-ldd-orange text-white px-4 py-1.5 rounded text-sm hover:bg-ldd-orange-dark transition-colors">
+            More about this site <span class="text-xs">▶</span>
           </a>
         </div>
       </div>
