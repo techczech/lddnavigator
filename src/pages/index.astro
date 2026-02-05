@@ -70,18 +70,24 @@ const didYouKnowTips = [
   <!-- Did You Know -->
   <section class="bg-white">
     <div class="max-w-4xl mx-auto px-4">
-      <div class="bg-ldd-orange text-white py-3 px-5 flex items-center gap-3">
-        <div class="font-bold text-sm whitespace-nowrap border-r border-white/40 pr-3">DID YOU<br/>KNOW?</div>
-        <p class="text-xs leading-relaxed flex-1" id="tip-text">
+      <div class="bg-ldd-orange text-white py-4 px-5 flex items-center gap-4">
+        <button
+          id="prev-tip-btn"
+          class="text-white/60 hover:text-white transition-colors"
+          title="Previous tip"
+        >
+          <span class="text-lg">◀</span>
+        </button>
+        <div class="font-bold text-base whitespace-nowrap border-r border-white/40 pr-4">DID YOU<br/>KNOW?</div>
+        <p class="text-sm leading-relaxed flex-1" id="tip-text">
           {didYouKnowTips[0]}
         </p>
         <button
           id="next-tip-btn"
-          class="text-white/70 hover:text-white text-xs whitespace-nowrap transition-colors flex items-center gap-1"
-          title="Show another tip"
+          class="text-white/60 hover:text-white transition-colors"
+          title="Next tip"
         >
-          <span>more</span>
-          <span class="text-[10px]">▶</span>
+          <span class="text-lg">▶</span>
         </button>
       </div>
     </div>
@@ -234,10 +240,18 @@ const didYouKnowTips = [
     let currentTipIndex = 0;
     const tipText = document.getElementById('tip-text');
     const nextTipBtn = document.getElementById('next-tip-btn');
+    const prevTipBtn = document.getElementById('prev-tip-btn');
 
     if (nextTipBtn && tipText) {
       nextTipBtn.addEventListener('click', () => {
         currentTipIndex = (currentTipIndex + 1) % didYouKnowTips.length;
+        tipText.textContent = didYouKnowTips[currentTipIndex];
+      });
+    }
+
+    if (prevTipBtn && tipText) {
+      prevTipBtn.addEventListener('click', () => {
+        currentTipIndex = (currentTipIndex - 1 + didYouKnowTips.length) % didYouKnowTips.length;
         tipText.textContent = didYouKnowTips[currentTipIndex];
       });
     }
