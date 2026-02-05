@@ -87,17 +87,77 @@
   }
 
   /* Highlight speakable sections on hover when TTS is active */
-  .tts-active [data-tts-block]:hover {
-    outline: 2px dashed var(--color-ldd-blue);
-    outline-offset: 4px;
-    cursor: pointer;
+  .tts-active .tts-hoverable {
+    position: relative;
+    transition: all 0.15s ease;
   }
 
-  /* Currently speaking indicator */
-  .tts-speaking {
-    outline: 2px solid var(--color-ldd-green) !important;
+  .tts-active .tts-hoverable:hover {
+    background-color: rgba(79, 170, 216, 0.1);
+    outline: 3px dashed var(--color-ldd-blue);
     outline-offset: 4px;
-    background-color: rgba(107, 140, 58, 0.05);
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  .tts-active .tts-hoverable:hover::after {
+    content: '🔊 Click to read';
+    position: absolute;
+    top: -1.75rem;
+    left: 0;
+    background: var(--color-ldd-blue);
+    color: white;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  /* Currently speaking indicator - animated pulse */
+  .tts-speaking {
+    outline: 3px solid var(--color-ldd-green) !important;
+    outline-offset: 4px;
+    background-color: rgba(107, 140, 58, 0.15) !important;
+    border-radius: 4px;
+    animation: tts-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes tts-pulse {
+    0%, 100% {
+      outline-color: var(--color-ldd-green);
+      background-color: rgba(107, 140, 58, 0.15);
+    }
+    50% {
+      outline-color: rgba(107, 140, 58, 0.6);
+      background-color: rgba(107, 140, 58, 0.08);
+    }
+  }
+
+  /* Speaking icon indicator */
+  .tts-speaking::before {
+    content: '🔊';
+    position: absolute;
+    top: -1.75rem;
+    left: 0;
+    background: var(--color-ldd-green);
+    color: white;
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    z-index: 100;
+    animation: tts-icon-pulse 0.8s ease-in-out infinite;
+  }
+
+  @keyframes tts-icon-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  /* Make speaking elements position relative for the icon */
+  .tts-speaking {
+    position: relative;
   }
 </style>
 
@@ -125,24 +185,40 @@
     let textQueue: string[] = [];
     let queueIndex = 0;
 
-    // Mark content sections as speakable
+    // Mark content sections as speakable and hoverable
     function markSpeakableSections() {
-      const selectors = [
-        'section',
-        'article',
-        '[class*="ContentSection"]',
-        '.prose > *',
-        'main > section > div > div',
-        'p',
-        'li',
-        'h1', 'h2', 'h3', 'h4',
-        '.bg-ldd-orange', // Did you know section
+      // Selectors for content blocks that can be read
+      const blockSelectors = [
+        'main section',
+        'main article',
+        'main .prose',
+        'main > section > div > div > div',
+        'main p',
+        'main li',
+        'main h1',
+        'main h2',
+        'main h3',
+        'main h4',
+        'main .bg-ldd-orange',
+        'main .bg-white',
+        'main .border',
+        'main [class*="card"]',
+        'main a.block',
+        'main button[data-behaviour-id]',
       ];
 
-      // Mark major content blocks
-      document.querySelectorAll('main section, main article, main .prose').forEach(el => {
-        if (!el.hasAttribute('data-tts-block')) {
+      // Mark all content blocks
+      document.querySelectorAll(blockSelectors.join(', ')).forEach(el => {
+        // Skip if inside the TTS panel or if it's a navigation/UI element
+        if (el.closest('#tts-panel') || el.closest('#tts-toggle-btn') || el.closest('nav') || el.closest('header') || el.closest('footer')) {
+          return;
+        }
+
+        // Only mark if it has meaningful text content
+        const text = (el.textContent || '').trim();
+        if (text.length > 10) {
           el.setAttribute('data-tts-block', 'true');
+          el.classList.add('tts-hoverable');
         }
       });
     }
@@ -251,6 +327,8 @@
       if (toggleBtn) toggleBtn.classList.add('hidden');
       document.body.classList.add('tts-active');
       isActive = true;
+      // Re-mark sections when activating
+      markSpeakableSections();
     }
 
     function hidePanel() {
@@ -262,6 +340,10 @@
       if (currentElement) {
         currentElement.classList.remove('tts-speaking');
       }
+      // Remove hoverable class when deactivating
+      document.querySelectorAll('.tts-hoverable').forEach(el => {
+        el.classList.remove('tts-hoverable');
+      });
       if (playBtn) playBtn.classList.remove('hidden');
       if (pauseBtn) pauseBtn.classList.add('hidden');
       textQueue = [];
@@ -313,21 +395,25 @@
       // Ignore clicks on the TTS panel itself
       if (target.closest('#tts-panel') || target.closest('#tts-toggle-btn')) return;
 
-      // Find the nearest speakable block
-      const block = target.closest('[data-tts-block]') ||
+      // Ignore clicks on navigation and interactive elements (unless they're TTS blocks)
+      if ((target.closest('nav') || target.closest('header') || target.closest('footer')) && !target.closest('[data-tts-block]')) {
+        return;
+      }
+
+      // Find the nearest speakable block - prefer tts-hoverable elements
+      const block = target.closest('.tts-hoverable') ||
+                    target.closest('[data-tts-block]') ||
                     target.closest('section') ||
                     target.closest('article') ||
                     target.closest('p') ||
                     target.closest('li');
 
-      if (block) {
+      if (block && !block.closest('#tts-panel')) {
         e.preventDefault();
+        e.stopPropagation();
         speakElement(block);
       }
     });
-
-    // Initialize
-    markSpeakableSections();
 
     // Keyboard shortcut: Escape to close
     document.addEventListener('keydown', (e) => {
