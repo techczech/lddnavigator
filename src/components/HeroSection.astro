@@ -1,55 +1,55 @@
 ---
-import { Eye, ClipboardList, MessageCircle } from '@lucide/astro';
+import { ScanEye, ClipboardCheck, MessagesSquare } from '@lucide/astro';
 ---
 
-<section class="bg-ldd-gray-light py-8">
-  <div class="max-w-5xl mx-auto px-4">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<section class="bg-ldd-gray-light py-10">
+  <div class="max-w-4xl mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
       <!-- What are the signs? -->
-      <div class="flex flex-col items-center">
-        <div class="bg-ldd-orange text-white px-6 py-2 rounded-full text-sm font-semibold mb-6">
+      <div class="flex flex-col items-center text-center">
+        <div class="bg-ldd-orange text-white px-5 py-1.5 rounded-full text-sm font-semibold mb-8 shadow-sm">
           What are the signs?
         </div>
-        <div class="mb-6">
-          <Eye class="w-24 h-24 text-ldd-gray-dark stroke-[1.5]" />
+        <div class="mb-8 text-ldd-gray-dark">
+          <ScanEye class="w-28 h-28 stroke-[1.2]" />
         </div>
         <a
           href="/behaviours"
-          class="bg-ldd-orange text-white px-4 py-2 rounded text-sm font-medium hover:bg-ldd-orange-dark transition-colors flex items-center gap-2"
+          class="bg-ldd-orange text-white px-4 py-1.5 rounded text-xs font-medium hover:bg-ldd-orange-dark transition-colors inline-flex items-center gap-1"
         >
-          What are the signs <span>&rarr;</span>
+          What are the signs <span class="text-[10px]">▶</span>
         </a>
       </div>
 
       <!-- What do I do? -->
-      <div class="flex flex-col items-center">
-        <div class="bg-ldd-green text-white px-6 py-2 rounded-full text-sm font-semibold mb-6">
+      <div class="flex flex-col items-center text-center">
+        <div class="bg-ldd-green text-white px-5 py-1.5 rounded-full text-sm font-semibold mb-8 shadow-sm">
           What do I do?
         </div>
-        <div class="mb-6">
-          <ClipboardList class="w-24 h-24 text-ldd-gray-dark stroke-[1.5]" />
+        <div class="mb-8 text-ldd-gray-dark">
+          <ClipboardCheck class="w-28 h-28 stroke-[1.2]" />
         </div>
         <a
           href="/strategies"
-          class="bg-ldd-green text-white px-4 py-2 rounded text-sm font-medium hover:bg-ldd-green-dark transition-colors flex items-center gap-2"
+          class="bg-ldd-green text-white px-4 py-1.5 rounded text-xs font-medium hover:bg-ldd-green-dark transition-colors inline-flex items-center gap-1"
         >
-          What do I do <span>&rarr;</span>
+          What do I do <span class="text-[10px]">▶</span>
         </a>
       </div>
 
       <!-- Who do I tell? -->
-      <div class="flex flex-col items-center">
-        <div class="bg-ldd-blue text-white px-6 py-2 rounded-full text-sm font-semibold mb-6">
+      <div class="flex flex-col items-center text-center">
+        <div class="bg-ldd-blue text-white px-5 py-1.5 rounded-full text-sm font-semibold mb-8 shadow-sm">
           Who do I tell?
         </div>
-        <div class="mb-6">
-          <MessageCircle class="w-24 h-24 text-ldd-gray-dark stroke-[1.5]" />
+        <div class="mb-8 text-ldd-gray-dark">
+          <MessagesSquare class="w-28 h-28 stroke-[1.2]" />
         </div>
         <a
           href="/resources"
-          class="bg-ldd-blue text-white px-4 py-2 rounded text-sm font-medium hover:bg-ldd-blue-dark transition-colors flex items-center gap-2"
+          class="bg-ldd-blue text-white px-4 py-1.5 rounded text-xs font-medium hover:bg-ldd-blue-dark transition-colors inline-flex items-center gap-1"
         >
-          Who do I tell <span>&rarr;</span>
+          Who do I tell <span class="text-[10px]">▶</span>
         </a>
       </div>
     </div>

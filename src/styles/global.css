@@ -1,19 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  /* Exact colors from the original design */
-  --color-ldd-orange: #e98024;
-  --color-ldd-orange-dark: #d06f1a;
-  --color-ldd-green: #5d7a2b;
-  --color-ldd-green-dark: #4a6222;
-  --color-ldd-blue: #4a9fd4;
-  --color-ldd-blue-dark: #3a8fc4;
-  --color-ldd-blue-light: #5baee0;
-  --color-ldd-gray: #5a5a5a;
-  --color-ldd-gray-light: #f0f0f0;
-  --color-ldd-gray-medium: #e8e8e8;
-  --color-ldd-gray-dark: #454545;
-  --color-ldd-yellow: #f1c40f;
+  /* Exact colors sampled from the original design */
+  --color-ldd-orange: #e88a1e;
+  --color-ldd-orange-dark: #d47a15;
+  --color-ldd-green: #6b8c3a;
+  --color-ldd-green-dark: #5a7830;
+  --color-ldd-blue: #4faad8;
+  --color-ldd-blue-dark: #3d98c6;
+  --color-ldd-gray: #555555;
+  --color-ldd-gray-light: #ebebeb;
+  --color-ldd-gray-medium: #d9d9d9;
+  --color-ldd-gray-dark: #4a4a4a;
+  --color-ldd-footer: #5a5a5a;
 
   --font-family-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -26,6 +25,8 @@ body {
   font-family: var(--font-family-sans);
   color: var(--color-ldd-gray);
   background-color: #fff;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 /* Navigation sidebar styles */
@@ -52,36 +53,18 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Hero card styling matching original */
-.hero-card {
-  position: relative;
-  padding: 1.5rem;
-  border-radius: 0;
-  text-align: center;
+/* Link styling to match original */
+a.text-link {
+  color: var(--color-ldd-blue);
+  text-decoration: underline;
 }
 
-.hero-card::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
+a.text-link:hover {
+  color: var(--color-ldd-blue-dark);
 }
 
-/* Icon styling */
-.icon-lg {
-  width: 64px;
-  height: 64px;
-}
-
-.icon-md {
-  width: 48px;
-  height: 48px;
-}
-
-.icon-sm {
-  width: 24px;
-  height: 24px;
+/* Button arrow styling */
+.btn-arrow::after {
+  content: ' ▶';
+  font-size: 0.7em;
 }

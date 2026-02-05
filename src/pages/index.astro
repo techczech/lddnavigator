@@ -6,7 +6,7 @@ import { behaviours } from '../data/behaviours';
 import { strategies, getStrategy } from '../data/strategies';
 import { getDifficulty } from '../data/difficulties';
 import {
-  PersonStanding,
+  UserRound,
   Puzzle,
   Lightbulb,
   Clock,
@@ -14,18 +14,16 @@ import {
   BookX,
   FileQuestion,
   CircleSlash,
-  Frown,
-  PlusCircle,
-  ChevronRight,
   EyeOff,
   AlertTriangle,
   Scale,
   BrainCog,
+  PlusCircle,
+  ChevronRight,
 } from '@lucide/astro';
 
 const featuredBehaviours = behaviours.slice(0, 6);
 
-// Map behaviour IDs to icon names for rendering
 const behaviourIconMap: Record<string, string> = {
   'always-late': 'clock',
   'slow-reader': 'turtle',
@@ -38,7 +36,6 @@ const behaviourIconMap: Record<string, string> = {
   'cant-concentrate': 'brain-cog',
 };
 
-// Build data for client-side
 const behavioursData = featuredBehaviours.map(b => ({
   id: b.id,
   title: b.title,
@@ -59,28 +56,24 @@ const behavioursData = featuredBehaviours.map(b => ({
   <HeroSection />
 
   <!-- Did You Know + Email signup -->
-  <section class="bg-white py-0">
-    <div class="max-w-5xl mx-auto px-4">
-      <div class="grid md:grid-cols-2">
-        <!-- Did You Know -->
-        <div class="bg-ldd-orange text-white py-4 px-6 flex items-center gap-4">
-          <div class="font-bold text-base whitespace-nowrap border-r border-white/30 pr-4">DID YOU<br/>KNOW?</div>
-          <p class="text-sm">
+  <section class="bg-white">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="grid md:grid-cols-2 gap-0">
+        <div class="bg-ldd-orange text-white py-3 px-5 flex items-center gap-3">
+          <div class="font-bold text-sm whitespace-nowrap border-r border-white/40 pr-3">DID YOU<br/>KNOW?</div>
+          <p class="text-xs leading-relaxed">
             You can avoid an anxiety attack by spending an extra few minutes informing a person with autism about a change to routine.
           </p>
         </div>
-        <!-- Email signup -->
-        <div class="bg-ldd-gray-light py-4 px-6">
-          <div class="flex items-center gap-2">
-            <span class="text-sm text-gray-600">Information and updates via email</span>
-          </div>
-          <div class="flex gap-2 mt-2">
+        <div class="bg-ldd-gray-light py-3 px-5">
+          <div class="text-xs text-gray-600 mb-1">Information and updates via email</div>
+          <div class="flex gap-2">
             <input
               type="email"
               placeholder="Email address"
-              class="flex-1 px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-ldd-green"
+              class="flex-1 px-2 py-1.5 border border-gray-300 text-xs focus:outline-none focus:ring-1 focus:ring-ldd-green"
             />
-            <button class="bg-ldd-gray-dark text-white px-4 py-2 rounded text-sm hover:bg-ldd-gray transition-colors">
+            <button class="bg-ldd-gray-dark text-white px-3 py-1.5 text-xs hover:bg-ldd-gray transition-colors">
               Submit
             </button>
           </div>
@@ -90,89 +83,87 @@ const behavioursData = featuredBehaviours.map(b => ({
   </section>
 
   <!-- Behaviour Navigator -->
-  <section class="py-8 bg-white">
-    <div class="max-w-5xl mx-auto px-4">
-      <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
-        <div class="grid lg:grid-cols-5 gap-0">
-          <!-- Left: Info sections (dynamic content) -->
-          <div class="lg:col-span-3 p-6 space-y-6" id="behaviour-details">
+  <section class="py-6 bg-white">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="border border-gray-300 rounded overflow-hidden">
+        <div class="grid lg:grid-cols-5">
+          <!-- Left: Behaviour/Difficulty/Strategies -->
+          <div class="lg:col-span-3 p-5 space-y-5 border-r border-gray-300" id="behaviour-details">
             <!-- Behaviour -->
-            <div class="flex gap-4">
-              <div class="flex-shrink-0 w-16">
-                <PersonStanding class="w-12 h-12 text-ldd-gray-dark" />
+            <div class="flex gap-3">
+              <div class="flex-shrink-0">
+                <UserRound class="w-10 h-10 text-ldd-gray-dark stroke-[1.5]" />
               </div>
-              <div>
-                <h3 class="font-bold text-lg text-ldd-gray-dark mb-1">Behaviour</h3>
-                <p class="text-gray-600 text-sm" id="behaviour-text">Your client is always late for meetings no matter how important.</p>
-                <p class="text-gray-500 text-sm mt-2" id="behaviour-detail">Sometimes you feel like the client does not respect your time or does not care. You have told them not to be late, but they always are.</p>
+              <div class="flex-1">
+                <h3 class="font-bold text-sm text-ldd-gray-dark mb-1">Behaviour</h3>
+                <p class="text-xs text-gray-600" id="behaviour-text">Your client is always late for meetings no matter how important.</p>
+                <p class="text-xs text-gray-500 mt-1" id="behaviour-detail">Sometimes you feel like the client does not respect your time or does not care. You have told them not to be late, but they always are.</p>
               </div>
             </div>
 
             <!-- Difficulty -->
-            <div class="flex gap-4">
-              <div class="flex-shrink-0 w-16">
-                <Puzzle class="w-12 h-12 text-ldd-gray-dark" />
+            <div class="flex gap-3">
+              <div class="flex-shrink-0">
+                <Puzzle class="w-10 h-10 text-ldd-gray-dark stroke-[1.5]" />
               </div>
-              <div>
-                <h3 class="font-bold text-lg text-ldd-gray-dark mb-1">Difficulty</h3>
-                <p class="text-gray-600 text-sm" id="difficulty-text">Your client may have problems with reading notes, sequencing, understanding time or following instructions.</p>
-                <p class="text-gray-500 text-sm mt-2" id="difficulty-detail">This could be a sign of dyslexia, dyspraxia or ADHD.</p>
+              <div class="flex-1">
+                <h3 class="font-bold text-sm text-ldd-gray-dark mb-1">Difficulty</h3>
+                <p class="text-xs text-gray-600" id="difficulty-text">Your client may have problems with reading notes, sequencing, understanding time or following instructions.</p>
+                <p class="text-xs text-gray-500 mt-1" id="difficulty-detail">This could be a sign of dyslexia, dyspraxia or ADHD.</p>
               </div>
             </div>
 
             <!-- Strategies -->
-            <div class="flex gap-4">
-              <div class="flex-shrink-0 w-16">
-                <Lightbulb class="w-12 h-12 text-ldd-gray-dark" />
+            <div class="flex gap-3">
+              <div class="flex-shrink-0">
+                <Lightbulb class="w-10 h-10 text-ldd-gray-dark stroke-[1.5]" />
               </div>
-              <div>
-                <h3 class="font-bold text-lg text-ldd-gray-dark mb-1">Strategies</h3>
-                <p class="text-ldd-orange font-medium text-sm" id="strategies-text">Written reminders, Colour coded calendars with icons, mnemonic devices.</p>
-                <p class="text-gray-500 text-sm mt-2">There are many strategies you can use. Focus on helping your client identify the right strategies for them.</p>
-                <a href="/strategies" class="inline-flex items-center gap-1 mt-3 bg-ldd-green text-white px-4 py-2 rounded text-sm hover:bg-ldd-green-dark transition-colors">
-                  More strategies <ChevronRight class="w-4 h-4" />
+              <div class="flex-1">
+                <h3 class="font-bold text-sm text-ldd-gray-dark mb-1">Strategies</h3>
+                <p class="text-xs text-ldd-orange font-medium" id="strategies-text">Written reminders, Colour coded calendars with icons, mnemonic devices.</p>
+                <p class="text-xs text-gray-500 mt-1">There are many strategies you can use. Focus on helping your client identify the right strategies for them.</p>
+                <a href="/strategies" class="inline-flex items-center gap-1 mt-2 bg-ldd-green text-white px-3 py-1 rounded text-xs hover:bg-ldd-green-dark transition-colors">
+                  More strategies <span class="text-[9px]">▶</span>
                 </a>
               </div>
             </div>
           </div>
 
           <!-- Right: Behaviour list -->
-          <div class="lg:col-span-2 bg-white border-l border-gray-200">
-            <div class="space-y-0" id="behaviour-list">
-              {featuredBehaviours.map((behaviour, index) => {
-                const iconName = behaviourIconMap[behaviour.id] || 'clock';
-                return (
-                  <button
-                    type="button"
-                    data-behaviour-id={behaviour.id}
-                    class:list={[
-                      'behaviour-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all text-left',
-                      index === 0
-                        ? 'bg-white text-ldd-gray-dark border-b border-gray-200 active'
-                        : 'bg-ldd-blue text-white border-b border-ldd-blue-dark/20 hover:brightness-110',
-                    ]}
-                  >
-                    {iconName === 'clock' && <Clock class="w-5 h-5 flex-shrink-0" />}
-                    {iconName === 'turtle' && <Turtle class="w-5 h-5 flex-shrink-0" />}
-                    {iconName === 'book-x' && <BookX class="w-5 h-5 flex-shrink-0" />}
-                    {iconName === 'file-question' && <FileQuestion class="w-5 h-5 flex-shrink-0" />}
-                    {iconName === 'circle-slash' && <CircleSlash class="w-5 h-5 flex-shrink-0" />}
-                    {iconName === 'eye-off' && <EyeOff class="w-5 h-5 flex-shrink-0" />}
-                    {iconName === 'alert-triangle' && <AlertTriangle class="w-5 h-5 flex-shrink-0" />}
-                    {iconName === 'scale' && <Scale class="w-5 h-5 flex-shrink-0" />}
-                    {iconName === 'brain-cog' && <BrainCog class="w-5 h-5 flex-shrink-0" />}
-                    <span class="flex-1">{behaviour.title}</span>
-                  </button>
-                );
-              })}
-              <a
-                href="/behaviours"
-                class="flex items-center gap-3 px-4 py-3 bg-ldd-green text-white text-sm font-medium transition-all hover:bg-ldd-green-dark"
-              >
-                <PlusCircle class="w-5 h-5" />
-                <span>More</span>
-              </a>
-            </div>
+          <div class="lg:col-span-2">
+            {featuredBehaviours.map((behaviour, index) => {
+              const iconName = behaviourIconMap[behaviour.id] || 'clock';
+              return (
+                <button
+                  type="button"
+                  data-behaviour-id={behaviour.id}
+                  class:list={[
+                    'behaviour-btn w-full flex items-center gap-2 px-3 py-2.5 text-xs font-medium text-left border-b last:border-b-0',
+                    index === 0
+                      ? 'bg-white text-ldd-gray-dark border-gray-200'
+                      : 'bg-ldd-blue text-white border-ldd-blue-dark/30 hover:bg-ldd-blue-dark',
+                  ]}
+                >
+                  {iconName === 'clock' && <Clock class="w-4 h-4 flex-shrink-0" />}
+                  {iconName === 'turtle' && <Turtle class="w-4 h-4 flex-shrink-0" />}
+                  {iconName === 'book-x' && <BookX class="w-4 h-4 flex-shrink-0" />}
+                  {iconName === 'file-question' && <FileQuestion class="w-4 h-4 flex-shrink-0" />}
+                  {iconName === 'circle-slash' && <CircleSlash class="w-4 h-4 flex-shrink-0" />}
+                  {iconName === 'eye-off' && <EyeOff class="w-4 h-4 flex-shrink-0" />}
+                  {iconName === 'alert-triangle' && <AlertTriangle class="w-4 h-4 flex-shrink-0" />}
+                  {iconName === 'scale' && <Scale class="w-4 h-4 flex-shrink-0" />}
+                  {iconName === 'brain-cog' && <BrainCog class="w-4 h-4 flex-shrink-0" />}
+                  <span>{behaviour.title}</span>
+                </button>
+              );
+            })}
+            <a
+              href="/behaviours"
+              class="flex items-center gap-2 px-3 py-2.5 bg-ldd-green text-white text-xs font-medium hover:bg-ldd-green-dark"
+            >
+              <PlusCircle class="w-4 h-4" />
+              <span>More</span>
+            </a>
           </div>
         </div>
       </div>
@@ -180,60 +171,60 @@ const behavioursData = featuredBehaviours.map(b => ({
   </section>
 
   <!-- Who Are You / Discussions / Login -->
-  <section class="py-6 bg-ldd-gray-light">
-    <div class="max-w-5xl mx-auto px-4">
-      <div class="grid md:grid-cols-3 gap-4">
+  <section class="py-4 bg-ldd-gray-light">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="grid md:grid-cols-3 gap-3">
         <!-- Who are you -->
-        <div class="bg-white rounded overflow-hidden shadow-sm">
-          <div class="bg-ldd-orange text-white px-4 py-2 text-sm font-semibold">Who are you?</div>
-          <div class="p-4 space-y-3">
-            <a href="/resources#frontline" class="flex items-center justify-between text-ldd-gray-dark hover:text-ldd-orange transition-colors text-sm">
-              <span>Front line prison workers</span>
-              <ChevronRight class="w-4 h-4" />
+        <div class="bg-white rounded overflow-hidden">
+          <div class="bg-ldd-orange text-white px-3 py-1.5 text-xs font-semibold">Who are you?</div>
+          <div class="p-3 space-y-2">
+            <a href="/resources#frontline" class="flex items-center justify-between text-ldd-gray-dark hover:text-ldd-orange transition-colors text-xs">
+              <span>Front line prison<br/>workers</span>
+              <ChevronRight class="w-3 h-3" />
             </a>
-            <a href="/resources#specialist" class="flex items-center justify-between text-ldd-gray-dark hover:text-ldd-orange transition-colors text-sm">
-              <span>Prison SEN Specialists</span>
-              <ChevronRight class="w-4 h-4" />
+            <a href="/resources#specialist" class="flex items-center justify-between text-ldd-gray-dark hover:text-ldd-orange transition-colors text-xs">
+              <span>Prison SEN<br/>Specialists</span>
+              <ChevronRight class="w-3 h-3" />
             </a>
-            <a href="/resources#governor" class="flex items-center justify-between text-ldd-gray-dark hover:text-ldd-orange transition-colors text-sm">
-              <span>Prison Governors</span>
-              <ChevronRight class="w-4 h-4" />
+            <a href="/resources#governor" class="flex items-center justify-between text-ldd-gray-dark hover:text-ldd-orange transition-colors text-xs">
+              <span>Prison<br/>Governors</span>
+              <ChevronRight class="w-3 h-3" />
             </a>
           </div>
         </div>
 
         <!-- Latest Discussions -->
-        <div class="bg-white rounded overflow-hidden shadow-sm">
-          <div class="bg-ldd-green text-white px-4 py-2 text-sm font-semibold">Latest Discussions</div>
-          <div class="p-4 space-y-3">
+        <div class="bg-white rounded overflow-hidden">
+          <div class="bg-ldd-green text-white px-3 py-1.5 text-xs font-semibold">Latest Discussions</div>
+          <div class="p-3 space-y-2">
             <div class="flex justify-between items-start gap-2">
-              <a href="#" class="text-ldd-gray-dark hover:text-ldd-green transition-colors text-sm">How can I deal with this?</a>
-              <span class="text-xs text-gray-400 whitespace-nowrap">1 day ago</span>
+              <a href="#" class="text-ldd-gray-dark hover:text-ldd-green transition-colors text-xs">How can I deal with this?</a>
+              <span class="text-[10px] text-gray-400 whitespace-nowrap">1 day ago</span>
             </div>
             <div class="flex justify-between items-start gap-2">
-              <a href="#" class="text-ldd-gray-dark hover:text-ldd-green transition-colors text-sm">Who knows how to solve this?</a>
-              <span class="text-xs text-gray-400 whitespace-nowrap">1 day ago</span>
+              <a href="#" class="text-ldd-gray-dark hover:text-ldd-green transition-colors text-xs">Who knows how to solve this?</a>
+              <span class="text-[10px] text-gray-400 whitespace-nowrap">1 day ago</span>
             </div>
             <div class="flex justify-between items-start gap-2">
-              <a href="#" class="text-ldd-gray-dark hover:text-ldd-green transition-colors text-sm">I have a problem with getting a...</a>
-              <span class="text-xs text-gray-400 whitespace-nowrap">1 day ago</span>
+              <a href="#" class="text-ldd-gray-dark hover:text-ldd-green transition-colors text-xs">I have a problem with getting a...</a>
+              <span class="text-[10px] text-gray-400 whitespace-nowrap">1 day ago</span>
             </div>
           </div>
         </div>
 
         <!-- Login -->
-        <div class="bg-white rounded overflow-hidden shadow-sm">
-          <div class="bg-ldd-blue text-white px-4 py-2 text-sm font-semibold">Log In</div>
-          <div class="p-4">
-            <form class="space-y-2">
-              <input type="text" placeholder="Username" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-ldd-blue" />
-              <input type="password" placeholder="Password" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-ldd-blue" />
-              <a href="#" class="block text-xs text-ldd-blue hover:underline">Forgotten your Password?</a>
-              <button type="submit" class="w-full bg-ldd-orange text-white py-2 rounded text-sm hover:bg-ldd-orange-dark transition-colors flex items-center justify-center gap-1">
-                Log in to your account <ChevronRight class="w-4 h-4" />
+        <div class="bg-white rounded overflow-hidden">
+          <div class="bg-ldd-blue text-white px-3 py-1.5 text-xs font-semibold">Log In</div>
+          <div class="p-3">
+            <form class="space-y-1.5">
+              <input type="text" placeholder="Username" class="w-full px-2 py-1.5 border border-gray-300 text-xs focus:outline-none focus:ring-1 focus:ring-ldd-blue" />
+              <input type="password" placeholder="Password" class="w-full px-2 py-1.5 border border-gray-300 text-xs focus:outline-none focus:ring-1 focus:ring-ldd-blue" />
+              <a href="#" class="block text-[10px] text-ldd-blue hover:underline">Forgotten your Password?</a>
+              <button type="submit" class="w-full bg-ldd-orange text-white py-1.5 text-xs hover:bg-ldd-orange-dark transition-colors flex items-center justify-center gap-1">
+                Log in to your account <span class="text-[9px]">▶</span>
               </button>
-              <button type="button" class="w-full border border-ldd-orange text-ldd-orange py-2 rounded text-sm hover:bg-ldd-orange hover:text-white transition-colors flex items-center justify-center gap-1">
-                Sign up for an account <ChevronRight class="w-4 h-4" />
+              <button type="button" class="w-full border border-ldd-orange text-ldd-orange py-1.5 text-xs hover:bg-ldd-orange hover:text-white transition-colors flex items-center justify-center gap-1">
+                Sign up for an account <span class="text-[9px]">▶</span>
               </button>
             </form>
           </div>
@@ -243,51 +234,51 @@ const behavioursData = featuredBehaviours.map(b => ({
   </section>
 
   <!-- About Sections -->
-  <section class="py-8 bg-white">
-    <div class="max-w-5xl mx-auto px-4 space-y-8">
+  <section class="py-6 bg-white">
+    <div class="max-w-4xl mx-auto px-4 space-y-6">
       <!-- About Us -->
-      <div class="grid md:grid-cols-4 gap-6 items-start">
-        <div class="bg-ldd-orange text-white px-4 py-2 rounded text-sm font-semibold inline-block">About Us</div>
-        <div class="md:col-span-3 flex gap-6">
-          <div class="w-32 h-24 bg-gray-200 rounded flex-shrink-0 hidden md:block"></div>
-          <div>
-            <p class="text-gray-600 text-sm mb-3">
-              LDD Navigator is a resource for prison staff and professionals working with offenders who have learning difficulties and disabilities. We provide practical strategies, information about different conditions, and resources to help you support people more effectively.
+      <div class="flex gap-4 items-start">
+        <div class="bg-ldd-orange text-white px-3 py-1 rounded text-xs font-semibold whitespace-nowrap">About Us</div>
+        <div class="flex gap-4 flex-1">
+          <div class="w-28 h-20 bg-gray-200 flex-shrink-0 hidden md:block"></div>
+          <div class="flex-1">
+            <p class="text-xs text-gray-600 mb-2">
+              LDD Navigator is a resource for prison staff and professionals working with offenders who have learning difficulties and disabilities. We provide practical strategies and resources to help you support people more effectively.
             </p>
-            <a href="/about" class="inline-flex items-center gap-1 bg-ldd-gray-dark text-white px-4 py-2 rounded text-sm hover:bg-ldd-gray transition-colors">
-              More about us <ChevronRight class="w-4 h-4" />
+            <a href="/about" class="inline-flex items-center gap-1 bg-ldd-gray-dark text-white px-3 py-1 rounded text-xs hover:bg-ldd-gray transition-colors">
+              More about us <span class="text-[9px]">▶</span>
             </a>
           </div>
         </div>
       </div>
 
       <!-- About This Site -->
-      <div class="grid md:grid-cols-4 gap-6 items-start">
-        <div class="bg-ldd-orange text-white px-4 py-2 rounded text-sm font-semibold inline-block">About This Site</div>
-        <div class="md:col-span-3 flex gap-6">
-          <div class="w-32 h-24 bg-gray-200 rounded flex-shrink-0 hidden md:block"></div>
-          <div>
-            <p class="text-gray-600 text-sm mb-3">
-              This website helps you identify behaviours that may indicate a learning difficulty, understand what might be causing them, and find strategies to help. You can navigate by behaviour, difficulty, or strategy to find the information you need.
+      <div class="flex gap-4 items-start">
+        <div class="bg-ldd-orange text-white px-3 py-1 rounded text-xs font-semibold whitespace-nowrap">About This Site</div>
+        <div class="flex gap-4 flex-1">
+          <div class="w-28 h-20 bg-gray-200 flex-shrink-0 hidden md:block"></div>
+          <div class="flex-1">
+            <p class="text-xs text-gray-600 mb-2">
+              This website helps you identify behaviours that may indicate a learning difficulty, understand what might be causing them, and find strategies to help.
             </p>
-            <a href="/about#site" class="inline-flex items-center gap-1 bg-ldd-orange text-white px-4 py-2 rounded text-sm hover:bg-ldd-orange-dark transition-colors">
-              More about this site <ChevronRight class="w-4 h-4" />
+            <a href="/about#site" class="inline-flex items-center gap-1 bg-ldd-orange text-white px-3 py-1 rounded text-xs hover:bg-ldd-orange-dark transition-colors">
+              More about this site <span class="text-[9px]">▶</span>
             </a>
           </div>
         </div>
       </div>
 
       <!-- Community -->
-      <div class="grid md:grid-cols-4 gap-6 items-start">
-        <div class="bg-ldd-green text-white px-4 py-2 rounded text-sm font-semibold inline-block">Community</div>
-        <div class="md:col-span-3 flex gap-6">
-          <div class="w-32 h-24 bg-gray-200 rounded flex-shrink-0 hidden md:block"></div>
-          <div>
-            <p class="text-gray-600 text-sm mb-3">
-              Join our community to share experiences, ask questions, and learn from other professionals working with people who have learning difficulties and disabilities.
+      <div class="flex gap-4 items-start">
+        <div class="bg-ldd-green text-white px-3 py-1 rounded text-xs font-semibold whitespace-nowrap">Community</div>
+        <div class="flex gap-4 flex-1">
+          <div class="w-28 h-20 bg-gray-200 flex-shrink-0 hidden md:block"></div>
+          <div class="flex-1">
+            <p class="text-xs text-gray-600 mb-2">
+              Join our community to share experiences, ask questions, and learn from other professionals working with people who have learning difficulties.
             </p>
-            <a href="/about#community" class="inline-flex items-center gap-1 bg-ldd-green text-white px-4 py-2 rounded text-sm hover:bg-ldd-green-dark transition-colors">
-              More about the Community <ChevronRight class="w-4 h-4" />
+            <a href="/about#community" class="inline-flex items-center gap-1 bg-ldd-green text-white px-3 py-1 rounded text-xs hover:bg-ldd-green-dark transition-colors">
+              More about the Community <span class="text-[9px]">▶</span>
             </a>
           </div>
         </div>
@@ -309,18 +300,15 @@ const behavioursData = featuredBehaviours.map(b => ({
       btn.addEventListener('click', () => {
         const id = btn.dataset.behaviourId;
         const data = behavioursData.find(b => b.id === id);
-
         if (!data) return;
 
-        // Update active state
         buttons.forEach(b => {
-          b.classList.remove('active', 'bg-white', 'text-ldd-gray-dark', 'border-b', 'border-gray-200');
-          b.classList.add('bg-ldd-blue', 'text-white', 'border-b', 'border-ldd-blue-dark/20');
+          b.classList.remove('bg-white', 'text-ldd-gray-dark', 'border-gray-200');
+          b.classList.add('bg-ldd-blue', 'text-white', 'border-ldd-blue-dark/30');
         });
-        btn.classList.remove('bg-ldd-blue', 'text-white', 'border-ldd-blue-dark/20');
-        btn.classList.add('active', 'bg-white', 'text-ldd-gray-dark', 'border-gray-200');
+        btn.classList.remove('bg-ldd-blue', 'text-white', 'border-ldd-blue-dark/30');
+        btn.classList.add('bg-white', 'text-ldd-gray-dark', 'border-gray-200');
 
-        // Update content
         if (behaviourText) behaviourText.textContent = data.description;
         if (behaviourDetail) behaviourDetail.textContent = '';
         if (difficultyText) difficultyText.textContent = data.difficulty;
