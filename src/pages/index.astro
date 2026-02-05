@@ -49,6 +49,19 @@ const behavioursData = featuredBehaviours.map(b => ({
     return d ? { id: d.id, title: d.title } : null;
   }).filter(Boolean),
 }));
+
+const didYouKnowTips = [
+  "You can avoid an anxiety attack by spending an extra few minutes informing a person with autism about a change to routine.",
+  "A person with autism may misunderstand irony, sarcasm or common sayings like \"the apple of my eye\".",
+  "Many people with autism are very sensitive to touch, sound or lighting.",
+  "People with autism can be easily misled by others who pretend to like them.",
+  "Many people who struggle with reading are highly intelligent - reading difficulties are not linked to low IQ.",
+  "Giving someone extra time to respond is one of the simplest and most effective accommodations you can make.",
+  "Colour-coding and visual markers can make text much more accessible for people with dyslexia.",
+  "Mind maps can help dyslexic readers process complex information by breaking it into smaller chunks.",
+  "People with ADHD often have trouble with time management - colour-coded calendars can help.",
+  "Dyspraxia affects coordination - allow extra time for tasks involving fine motor skills like writing.",
+];
 ---
 
 <Layout title="Home">
@@ -59,9 +72,17 @@ const behavioursData = featuredBehaviours.map(b => ({
     <div class="max-w-4xl mx-auto px-4">
       <div class="bg-ldd-orange text-white py-3 px-5 flex items-center gap-3">
         <div class="font-bold text-sm whitespace-nowrap border-r border-white/40 pr-3">DID YOU<br/>KNOW?</div>
-        <p class="text-xs leading-relaxed">
-          You can avoid an anxiety attack by spending an extra few minutes informing a person with autism about a change to routine.
+        <p class="text-xs leading-relaxed flex-1" id="tip-text">
+          {didYouKnowTips[0]}
         </p>
+        <button
+          id="next-tip-btn"
+          class="text-white/70 hover:text-white text-xs whitespace-nowrap transition-colors flex items-center gap-1"
+          title="Show another tip"
+        >
+          <span>more</span>
+          <span class="text-[10px]">▶</span>
+        </button>
       </div>
     </div>
   </section>
@@ -172,8 +193,9 @@ const behavioursData = featuredBehaviours.map(b => ({
   </section>
 </Layout>
 
-<script define:vars={{ behavioursData }}>
+<script define:vars={{ behavioursData, didYouKnowTips }}>
   document.addEventListener('DOMContentLoaded', () => {
+    // Behaviour navigator
     const buttons = document.querySelectorAll('.behaviour-btn');
     const behaviourText = document.getElementById('behaviour-text');
     const behaviourDetail = document.getElementById('behaviour-detail');
@@ -207,5 +229,17 @@ const behavioursData = featuredBehaviours.map(b => ({
         }
       });
     });
+
+    // Did You Know tips
+    let currentTipIndex = 0;
+    const tipText = document.getElementById('tip-text');
+    const nextTipBtn = document.getElementById('next-tip-btn');
+
+    if (nextTipBtn && tipText) {
+      nextTipBtn.addEventListener('click', () => {
+        currentTipIndex = (currentTipIndex + 1) % didYouKnowTips.length;
+        tipText.textContent = didYouKnowTips[currentTipIndex];
+      });
+    }
   });
 </script>
