@@ -1,0 +1,339 @@
+---
+// Text-to-Speech component using Web Speech API
+---
+
+<!-- TTS Control Panel - Fixed position -->
+<div id="tts-panel" class="fixed bottom-4 right-4 z-50 hidden">
+  <div class="bg-white rounded-lg shadow-lg border border-gray-200 p-3">
+    <div class="flex items-center gap-2">
+      <button
+        id="tts-play-btn"
+        class="tts-btn bg-ldd-green text-white"
+        aria-label="Play"
+        title="Play"
+      >
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+        </svg>
+      </button>
+      <button
+        id="tts-pause-btn"
+        class="tts-btn bg-ldd-orange text-white hidden"
+        aria-label="Pause"
+        title="Pause"
+      >
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M5.75 3a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V3.75A.75.75 0 007.25 3h-1.5zM12.75 3a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V3.75a.75.75 0 00-.75-.75h-1.5z"/>
+        </svg>
+      </button>
+      <button
+        id="tts-stop-btn"
+        class="tts-btn bg-gray-500 text-white"
+        aria-label="Stop"
+        title="Stop"
+      >
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M4.75 3A1.75 1.75 0 003 4.75v10.5c0 .966.784 1.75 1.75 1.75h10.5A1.75 1.75 0 0017 15.25V4.75A1.75 1.75 0 0015.25 3H4.75z"/>
+        </svg>
+      </button>
+      <button
+        id="tts-close-btn"
+        class="tts-btn bg-gray-300 text-gray-700"
+        aria-label="Close"
+        title="Close"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    <div id="tts-status" class="text-xs text-gray-500 mt-2 text-center max-w-[200px] truncate"></div>
+  </div>
+</div>
+
+<!-- TTS Toggle Button - Always visible -->
+<button
+  id="tts-toggle-btn"
+  class="fixed bottom-4 right-4 z-40 bg-ldd-blue text-white p-3 rounded-full shadow-lg hover:bg-ldd-blue-dark transition-colors"
+  aria-label="Read aloud"
+  title="Read aloud - click here or click any section to listen"
+>
+  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>
+  </svg>
+</button>
+
+<style>
+  .tts-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    border: none;
+  }
+
+  .tts-btn:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+
+  .tts-btn:focus {
+    outline: 2px solid var(--color-ldd-green);
+    outline-offset: 2px;
+  }
+
+  /* Highlight speakable sections on hover when TTS is active */
+  .tts-active [data-tts-block]:hover {
+    outline: 2px dashed var(--color-ldd-blue);
+    outline-offset: 4px;
+    cursor: pointer;
+  }
+
+  /* Currently speaking indicator */
+  .tts-speaking {
+    outline: 2px solid var(--color-ldd-green) !important;
+    outline-offset: 4px;
+    background-color: rgba(107, 140, 58, 0.05);
+  }
+</style>
+
+<script>
+  // Check if speech synthesis is supported
+  const synth = window.speechSynthesis;
+  const isTTSSupported = 'speechSynthesis' in window;
+
+  if (!isTTSSupported) {
+    // Hide TTS button if not supported
+    const toggleBtn = document.getElementById('tts-toggle-btn');
+    if (toggleBtn) toggleBtn.style.display = 'none';
+  } else {
+    const toggleBtn = document.getElementById('tts-toggle-btn');
+    const panel = document.getElementById('tts-panel');
+    const playBtn = document.getElementById('tts-play-btn');
+    const pauseBtn = document.getElementById('tts-pause-btn');
+    const stopBtn = document.getElementById('tts-stop-btn');
+    const closeBtn = document.getElementById('tts-close-btn');
+    const statusEl = document.getElementById('tts-status');
+
+    let currentUtterance: SpeechSynthesisUtterance | null = null;
+    let currentElement: Element | null = null;
+    let isActive = false;
+    let textQueue: string[] = [];
+    let queueIndex = 0;
+
+    // Mark content sections as speakable
+    function markSpeakableSections() {
+      const selectors = [
+        'section',
+        'article',
+        '[class*="ContentSection"]',
+        '.prose > *',
+        'main > section > div > div',
+        'p',
+        'li',
+        'h1', 'h2', 'h3', 'h4',
+        '.bg-ldd-orange', // Did you know section
+      ];
+
+      // Mark major content blocks
+      document.querySelectorAll('main section, main article, main .prose').forEach(el => {
+        if (!el.hasAttribute('data-tts-block')) {
+          el.setAttribute('data-tts-block', 'true');
+        }
+      });
+    }
+
+    function getTextContent(element: Element): string {
+      // Clone to avoid modifying original
+      const clone = element.cloneNode(true) as Element;
+      // Remove script and style elements
+      clone.querySelectorAll('script, style, [aria-hidden="true"]').forEach(el => el.remove());
+      // Get text content, clean up whitespace
+      return (clone.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function speak(text: string, element?: Element) {
+      if (!text) return;
+
+      // Cancel any ongoing speech
+      synth.cancel();
+
+      currentUtterance = new SpeechSynthesisUtterance(text);
+      currentUtterance.rate = 0.9; // Slightly slower for accessibility
+      currentUtterance.pitch = 1;
+
+      // Update UI
+      if (playBtn) playBtn.classList.add('hidden');
+      if (pauseBtn) pauseBtn.classList.remove('hidden');
+
+      if (element) {
+        currentElement = element;
+        element.classList.add('tts-speaking');
+      }
+
+      currentUtterance.onend = () => {
+        if (currentElement) {
+          currentElement.classList.remove('tts-speaking');
+        }
+        if (playBtn) playBtn.classList.remove('hidden');
+        if (pauseBtn) pauseBtn.classList.add('hidden');
+
+        // Continue with queue if there's more
+        if (queueIndex < textQueue.length - 1) {
+          queueIndex++;
+          speak(textQueue[queueIndex]);
+        } else {
+          if (statusEl) statusEl.textContent = 'Finished';
+          textQueue = [];
+          queueIndex = 0;
+        }
+      };
+
+      currentUtterance.onerror = () => {
+        if (currentElement) {
+          currentElement.classList.remove('tts-speaking');
+        }
+        if (playBtn) playBtn.classList.remove('hidden');
+        if (pauseBtn) pauseBtn.classList.add('hidden');
+        if (statusEl) statusEl.textContent = 'Error occurred';
+      };
+
+      synth.speak(currentUtterance);
+      if (statusEl) statusEl.textContent = text.substring(0, 30) + (text.length > 30 ? '...' : '');
+    }
+
+    function speakElement(element: Element) {
+      const text = getTextContent(element);
+      if (text) {
+        textQueue = [text];
+        queueIndex = 0;
+        speak(text, element);
+      }
+    }
+
+    function speakPage() {
+      // Get main content
+      const main = document.querySelector('main');
+      if (!main) return;
+
+      const text = getTextContent(main);
+      if (text) {
+        // Split into chunks for better handling
+        const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+        textQueue = [];
+
+        // Group sentences into reasonable chunks (about 200 chars each)
+        let chunk = '';
+        sentences.forEach(sentence => {
+          if (chunk.length + sentence.length < 200) {
+            chunk += sentence;
+          } else {
+            if (chunk) textQueue.push(chunk.trim());
+            chunk = sentence;
+          }
+        });
+        if (chunk) textQueue.push(chunk.trim());
+
+        queueIndex = 0;
+        if (textQueue.length > 0) {
+          speak(textQueue[0]);
+          if (statusEl) statusEl.textContent = `Reading page (${textQueue.length} sections)`;
+        }
+      }
+    }
+
+    function showPanel() {
+      if (panel) panel.classList.remove('hidden');
+      if (toggleBtn) toggleBtn.classList.add('hidden');
+      document.body.classList.add('tts-active');
+      isActive = true;
+    }
+
+    function hidePanel() {
+      synth.cancel();
+      if (panel) panel.classList.add('hidden');
+      if (toggleBtn) toggleBtn.classList.remove('hidden');
+      document.body.classList.remove('tts-active');
+      isActive = false;
+      if (currentElement) {
+        currentElement.classList.remove('tts-speaking');
+      }
+      if (playBtn) playBtn.classList.remove('hidden');
+      if (pauseBtn) pauseBtn.classList.add('hidden');
+      textQueue = [];
+      queueIndex = 0;
+    }
+
+    // Event listeners
+    toggleBtn?.addEventListener('click', () => {
+      showPanel();
+      if (statusEl) statusEl.textContent = 'Click any section or press Play for whole page';
+    });
+
+    closeBtn?.addEventListener('click', hidePanel);
+
+    playBtn?.addEventListener('click', () => {
+      if (synth.paused) {
+        synth.resume();
+        if (playBtn) playBtn.classList.add('hidden');
+        if (pauseBtn) pauseBtn.classList.remove('hidden');
+      } else {
+        speakPage();
+      }
+    });
+
+    pauseBtn?.addEventListener('click', () => {
+      synth.pause();
+      if (playBtn) playBtn.classList.remove('hidden');
+      if (pauseBtn) pauseBtn.classList.add('hidden');
+    });
+
+    stopBtn?.addEventListener('click', () => {
+      synth.cancel();
+      if (currentElement) {
+        currentElement.classList.remove('tts-speaking');
+      }
+      if (playBtn) playBtn.classList.remove('hidden');
+      if (pauseBtn) pauseBtn.classList.add('hidden');
+      textQueue = [];
+      queueIndex = 0;
+      if (statusEl) statusEl.textContent = 'Stopped';
+    });
+
+    // Click on content to read it
+    document.addEventListener('click', (e) => {
+      if (!isActive) return;
+
+      const target = e.target as Element;
+
+      // Ignore clicks on the TTS panel itself
+      if (target.closest('#tts-panel') || target.closest('#tts-toggle-btn')) return;
+
+      // Find the nearest speakable block
+      const block = target.closest('[data-tts-block]') ||
+                    target.closest('section') ||
+                    target.closest('article') ||
+                    target.closest('p') ||
+                    target.closest('li');
+
+      if (block) {
+        e.preventDefault();
+        speakElement(block);
+      }
+    });
+
+    // Initialize
+    markSpeakableSections();
+
+    // Keyboard shortcut: Escape to close
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isActive) {
+        hidePanel();
+      }
+    });
+  }
+</script>
