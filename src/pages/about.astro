@@ -17,15 +17,28 @@ import PageHeader from '../components/PageHeader.astro';
   <section class="py-12">
     <div class="max-w-3xl mx-auto px-4">
       <div class="prose prose-lg max-w-none">
-        <h2 class="text-2xl font-semibold text-ldd-gray-dark mb-4">About Us</h2>
+        <div class="bg-ldd-blue/10 border border-ldd-blue/30 rounded-lg p-6 mb-8">
+          <h2 class="text-xl font-semibold text-ldd-gray-dark mb-3">About This Recreation</h2>
+          <p class="text-gray-600 mb-4">
+            This is a recreation of the original LDD Navigator website from 2013. The original site was developed to help prison staff and professionals working with offenders who have learning difficulties and disabilities. It was released under a <strong>Creative Commons Attribution (CC BY)</strong> license.
+          </p>
+          <p class="text-gray-600 mb-4">
+            The original website became defunct around 2018. This recreation was created by <a href="https://dominiklukes.net" class="text-ldd-blue hover:underline" target="_blank" rel="noopener noreferrer">Dominik Lukeš</a> from the original design documents and content using <strong>Claude Code</strong>.
+          </p>
+          <p class="text-gray-600">
+            <strong>Please note:</strong> The original contact details and forms no longer work. However, the resources and information on this site remain freely available for anyone to use under the original CC BY license.
+          </p>
+        </div>
+
+        <h2 class="text-2xl font-semibold text-ldd-gray-dark mb-4">About the Original Project</h2>
         <p class="text-gray-600 mb-6">
-          LDD Navigator is a resource for prison staff and professionals working with offenders who have learning difficulties and disabilities. We provide practical strategies, information about different conditions, and resources to help you support people more effectively.
+          LDD Navigator was created as a resource for prison staff and professionals working with offenders who have learning difficulties and disabilities. It provides practical strategies, information about different conditions, and resources to help support people more effectively.
         </p>
         <p class="text-gray-600 mb-8">
-          The site was developed in partnership with leading organisations in the field of learning difficulties, including Dyslexia Action and the National Autistic Society.
+          The original site was developed in partnership with leading organisations in the field of learning difficulties, including Dyslexia Action and the National Autistic Society.
         </p>
 
-        <h2 id="site" class="text-2xl font-semibold text-ldd-gray-dark mb-4">About This Site</h2>
+        <h2 id="site" class="text-2xl font-semibold text-ldd-gray-dark mb-4">How to Use This Site</h2>
         <p class="text-gray-600 mb-6">
           This website helps you identify behaviours that may indicate a learning difficulty, understand what might be causing them, and find strategies to help. You can navigate the site in several ways:
         </p>
@@ -39,7 +52,7 @@ import PageHeader from '../components/PageHeader.astro';
         <p class="text-gray-600 mb-6">
           Research suggests that a significant proportion of the prison population has some form of learning difficulty or disability. Many have never been diagnosed and may not even be aware of their condition.
         </p>
-        <p class="text-gray-600 mb-8">
+        <p class="text-gray-600 mb-4">
           Understanding and accommodating these difficulties can:
         </p>
         <ul class="list-disc pl-6 space-y-2 text-gray-600 mb-8">
@@ -49,7 +62,10 @@ import PageHeader from '../components/PageHeader.astro';
           <li>Support rehabilitation and reduce reoffending</li>
         </ul>
 
-        <h2 id="partners" class="text-2xl font-semibold text-ldd-gray-dark mb-4">Our Partners</h2>
+        <h2 id="partners" class="text-2xl font-semibold text-ldd-gray-dark mb-4">Original Partners</h2>
+        <p class="text-gray-600 mb-4">
+          The original LDD Navigator was developed in partnership with:
+        </p>
         <div class="grid md:grid-cols-2 gap-6 mb-8">
           <div class="bg-gray-100 rounded-lg p-6">
             <h3 class="font-semibold text-ldd-gray-dark mb-2">Dyslexia Action</h3>
@@ -65,28 +81,23 @@ import PageHeader from '../components/PageHeader.astro';
           </div>
         </div>
 
-        <h2 class="text-2xl font-semibold text-ldd-gray-dark mb-4">Contact Us</h2>
-        <p class="text-gray-600 mb-6">
-          If you have questions, suggestions, or would like to contribute to this resource, please get in touch.
+        <h2 class="text-2xl font-semibold text-ldd-gray-dark mb-4">License and Usage</h2>
+        <p class="text-gray-600 mb-4">
+          The content on this site is available under a <strong>Creative Commons Attribution (CC BY)</strong> license. You are free to:
         </p>
-        <div class="bg-white border border-gray-200 rounded-lg p-6">
-          <form class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-              <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-ldd-green" />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-              <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-ldd-green" />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
-              <textarea rows="4" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-ldd-green"></textarea>
-            </div>
-            <button type="submit" class="bg-ldd-green text-white px-6 py-2 rounded hover:bg-ldd-green-dark transition-colors">
-              Send message
-            </button>
-          </form>
+        <ul class="list-disc pl-6 space-y-2 text-gray-600 mb-6">
+          <li><strong>Share</strong> — copy and redistribute the material in any medium or format</li>
+          <li><strong>Adapt</strong> — remix, transform, and build upon the material for any purpose, even commercially</li>
+        </ul>
+        <p class="text-gray-600 mb-8">
+          As long as you give appropriate credit to the original LDD Navigator project.
+        </p>
+
+        <div class="bg-gray-100 rounded-lg p-6">
+          <h3 class="font-semibold text-ldd-gray-dark mb-2">Recreation Credits</h3>
+          <p class="text-gray-600 text-sm">
+            This site was recreated by <a href="https://dominiklukes.net" class="text-ldd-blue hover:underline" target="_blank" rel="noopener noreferrer">Dominik Lukeš</a> in 2025 using Claude Code from original design documents and content from the 2013 LDD Navigator project.
+          </p>
         </div>
       </div>
     </div>
