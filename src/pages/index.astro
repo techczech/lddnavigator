@@ -1,0 +1,186 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeroSection from '../components/HeroSection.astro';
+import Card from '../components/Card.astro';
+import { difficulties } from '../data/difficulties';
+import { behaviours } from '../data/behaviours';
+import { strategies } from '../data/strategies';
+
+const featuredBehaviours = behaviours.slice(0, 6);
+const featuredStrategies = strategies.slice(0, 3);
+---
+
+<Layout title="Home">
+  <HeroSection />
+
+  <!-- Did You Know -->
+  <section class="bg-ldd-orange text-white py-4">
+    <div class="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center gap-4">
+      <div class="font-bold text-lg whitespace-nowrap">DID YOU KNOW?</div>
+      <p class="text-sm md:text-base">
+        You can avoid an anxiety attack by spending an extra few minutes informing a person with autism about a change to routine.
+      </p>
+    </div>
+  </section>
+
+  <!-- Behaviour Navigator -->
+  <section class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid lg:grid-cols-3 gap-8">
+        <!-- Left: Info cards -->
+        <div class="lg:col-span-2 space-y-6">
+          <Card title="Behaviour" icon="🔄" color="blue">
+            <p>Your client is always late for meetings no matter how important.</p>
+            <p class="mt-2 text-sm">Sometimes you feel like the client does not respect your time or does not care. Appropriately streamline proactive web services without one-to-one niche markets.</p>
+          </Card>
+
+          <Card title="Difficulty" icon="🧩" color="green">
+            <p>Your client may have problems with reading notes, sequencing, understanding time or following instructions.</p>
+            <p class="mt-2 text-sm">This could be a sign of dyslexia, dyspraxia or ADHD. Compellingly conceptualize technically sound products rather than market positioning paradigms.</p>
+          </Card>
+
+          <Card title="Strategies" icon="💡" color="orange">
+            <p class="text-ldd-orange font-medium">Written reminders, Colour coded calendars with icons, mnemonic devices.</p>
+            <p class="mt-2 text-sm">Other strategies include: Compellingly conceptualize technically sound products rather than market positioning paradigms.</p>
+            <a href="/strategies" class="inline-block mt-3 bg-ldd-green text-white px-4 py-2 rounded text-sm hover:bg-ldd-green-dark transition-colors">
+              More strategies &rarr;
+            </a>
+          </Card>
+        </div>
+
+        <!-- Right: Behaviour list -->
+        <div>
+          <h3 class="text-lg font-semibold text-ldd-gray-dark mb-4">Common Behaviours</h3>
+          <div class="space-y-2">
+            {featuredBehaviours.map((behaviour, index) => (
+              <a
+                href={`/behaviours/${behaviour.id}`}
+                class:list={[
+                  'flex items-center gap-3 px-4 py-3 rounded text-white text-sm font-medium transition-all hover:translate-x-1',
+                  index === 0 ? 'bg-ldd-blue' : 'bg-ldd-blue/80 hover:bg-ldd-blue',
+                ]}
+              >
+                <span class="text-lg">⏰</span>
+                <span>{behaviour.title}</span>
+              </a>
+            ))}
+            <a
+              href="/behaviours"
+              class="flex items-center gap-3 px-4 py-3 rounded bg-ldd-green text-white text-sm font-medium transition-all hover:bg-ldd-green-dark"
+            >
+              <span class="text-lg">➕</span>
+              <span>View all behaviours</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Who Are You / Discussions / Login -->
+  <section class="py-8 bg-gray-100">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Who are you -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div class="bg-ldd-orange text-white px-4 py-2 font-semibold">Who are you?</div>
+          <div class="p-4 space-y-3">
+            <a href="/resources#frontline" class="block text-ldd-gray-dark hover:text-ldd-orange transition-colors">
+              Front line prison workers &rarr;
+            </a>
+            <a href="/resources#specialist" class="block text-ldd-gray-dark hover:text-ldd-orange transition-colors">
+              Prison SEN Specialists &rarr;
+            </a>
+            <a href="/resources#governor" class="block text-ldd-gray-dark hover:text-ldd-orange transition-colors">
+              Prison Governors &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Latest Discussions -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div class="bg-ldd-green text-white px-4 py-2 font-semibold">Latest Discussions</div>
+          <div class="p-4 space-y-3">
+            <div class="flex justify-between items-start">
+              <a href="#" class="text-ldd-gray-dark hover:text-ldd-green transition-colors text-sm">How can I deal with this?</a>
+              <span class="text-xs text-gray-400">1 day ago</span>
+            </div>
+            <div class="flex justify-between items-start">
+              <a href="#" class="text-ldd-gray-dark hover:text-ldd-green transition-colors text-sm">Who knows how to solve this?</a>
+              <span class="text-xs text-gray-400">1 day ago</span>
+            </div>
+            <div class="flex justify-between items-start">
+              <a href="#" class="text-ldd-gray-dark hover:text-ldd-green transition-colors text-sm">I have a problem with getting a...</a>
+              <span class="text-xs text-gray-400">1 day ago</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Login -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div class="bg-ldd-blue text-white px-4 py-2 font-semibold">Log In</div>
+          <div class="p-4">
+            <form class="space-y-3">
+              <input type="text" placeholder="Username" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-ldd-blue" />
+              <input type="password" placeholder="Password" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-ldd-blue" />
+              <a href="#" class="block text-sm text-ldd-blue hover:underline">Forgotten your Password?</a>
+              <button type="submit" class="w-full bg-ldd-orange text-white py-2 rounded hover:bg-ldd-orange-dark transition-colors">
+                Log in to your account &rarr;
+              </button>
+              <button type="button" class="w-full border border-ldd-orange text-ldd-orange py-2 rounded hover:bg-ldd-orange hover:text-white transition-colors">
+                Sign up for an account &rarr;
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Sections -->
+  <section class="py-12 bg-white">
+    <div class="max-w-5xl mx-auto px-4 space-y-12">
+      <!-- About Us -->
+      <div class="grid md:grid-cols-3 gap-6 items-start">
+        <div class="bg-ldd-orange text-white px-4 py-2 rounded font-semibold inline-block">About Us</div>
+        <div class="md:col-span-2">
+          <p class="text-gray-600 mb-4">
+            LDD Navigator is a resource for prison staff and professionals working with offenders who have learning difficulties and disabilities. We provide practical strategies, information about different conditions, and resources to help you support people more effectively.
+          </p>
+          <a href="/about" class="inline-block bg-ldd-gray-dark text-white px-4 py-2 rounded text-sm hover:bg-ldd-gray transition-colors">
+            More about us &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- About This Site -->
+      <div class="grid md:grid-cols-3 gap-6 items-start">
+        <div class="bg-ldd-orange text-white px-4 py-2 rounded font-semibold inline-block">About This Site</div>
+        <div class="md:col-span-2">
+          <p class="text-gray-600 mb-4">
+            This website helps you identify behaviours that may indicate a learning difficulty, understand what might be causing them, and find strategies to help. You can navigate by behaviour, difficulty, or strategy to find the information you need.
+          </p>
+          <a href="/about#site" class="inline-block bg-ldd-orange text-white px-4 py-2 rounded text-sm hover:bg-ldd-orange-dark transition-colors">
+            More about this site &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- Difficulties Overview -->
+      <div>
+        <h2 class="text-2xl font-semibold text-ldd-gray-dark mb-6">Learning Difficulties</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {difficulties.map(diff => (
+            <a
+              href={`/difficulties/${diff.id}`}
+              class="block bg-gray-50 border border-gray-200 rounded p-4 hover:border-ldd-green hover:shadow-sm transition-all"
+            >
+              <h3 class="font-semibold text-ldd-gray-dark mb-1">{diff.title}</h3>
+              <p class="text-sm text-gray-600 line-clamp-2">{diff.shortDescription}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

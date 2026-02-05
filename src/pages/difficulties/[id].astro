@@ -1,0 +1,153 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import ContentSection from '../../components/ContentSection.astro';
+import NavigationSidebar from '../../components/NavigationSidebar.astro';
+import { difficulties, getDifficulty } from '../../data/difficulties';
+import { getBehaviour } from '../../data/behaviours';
+import { getStrategy } from '../../data/strategies';
+
+export function getStaticPaths() {
+  return difficulties.map(diff => ({
+    params: { id: diff.id },
+  }));
+}
+
+const { id } = Astro.params;
+const difficulty = getDifficulty(id);
+
+if (!difficulty) {
+  return Astro.redirect('/difficulties');
+}
+
+const sidebarItems = [
+  { label: 'What is it?', href: '#what-is-it', icon: '❓', color: 'orange' as const, active: true },
+  { label: 'What to look out for', href: '#look-out-for', icon: '👁️', color: 'blue' as const },
+  { label: 'What to do', href: '#what-to-do', icon: '👍', color: 'green' as const },
+  { label: 'Who can help', href: '#who-can-help', icon: '🤝', color: 'gray' as const },
+  { label: 'FAQs', href: '#faqs', icon: 'ℹ️', color: 'gray' as const },
+];
+---
+
+<Layout title={difficulty.title}>
+  <PageHeader
+    title={difficulty.title}
+    icon="🧩"
+    color="green"
+    breadcrumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'Difficulties', href: '/difficulties' },
+      { label: difficulty.title },
+    ]}
+  />
+
+  <section class="py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid lg:grid-cols-4 gap-8">
+        <!-- Main content -->
+        <div class="lg:col-span-3 space-y-12">
+          <ContentSection title="What is it?" icon="❓" id="what-is-it">
+            {difficulty.whatIsIt.split('\n\n').map(para => (
+              <p>{para}</p>
+            ))}
+          </ContentSection>
+
+          <ContentSection title="What to look out for" icon="👁️" id="look-out-for">
+            <p class="mb-4">{difficulty.title} is a <strong>hidden disability</strong> and cannot be reliably determined without a set of assessments performed by a certified assessor. However, many of the signs below may indicate {difficulty.title.toLowerCase()}. And even if the person is not diagnosed, they can still benefit from the same strategies.</p>
+            <p class="font-medium mb-2">Look out for:</p>
+            <ul class="list-disc pl-6 space-y-1">
+              {difficulty.whatToLookOutFor.map(item => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </ContentSection>
+
+          <ContentSection title="What to do" icon="👍" id="what-to-do">
+            <p class="text-ldd-orange font-medium mb-4">{difficulty.whatToDo.slice(0, 3).join(', ')}.</p>
+            <p class="mb-4">Other strategies include:</p>
+            <ul class="list-disc pl-6 space-y-1 mb-6">
+              {difficulty.whatToDo.map(item => (
+                <li>{item}</li>
+              ))}
+            </ul>
+
+            <h3 class="font-semibold text-ldd-gray-dark mb-3">Related strategies</h3>
+            <div class="flex flex-wrap gap-2">
+              {difficulty.relatedStrategies.map(strategyId => {
+                const strategy = getStrategy(strategyId);
+                return strategy && (
+                  <a
+                    href={`/strategies/${strategyId}`}
+                    class="bg-ldd-green text-white px-3 py-1 rounded text-sm hover:bg-ldd-green-dark transition-colors"
+                  >
+                    {strategy.title}
+                  </a>
+                );
+              })}
+            </div>
+          </ContentSection>
+
+          <ContentSection title="Who can help" icon="🤝" id="who-can-help">
+            {difficulty.resources && difficulty.resources.length > 0 ? (
+              <ul class="space-y-3">
+                {difficulty.resources.map(resource => (
+                  <li class="flex items-center gap-3">
+                    <span class="text-ldd-blue">
+                      {resource.type === 'webpage' ? '🌐' : '📄'}
+                    </span>
+                    {resource.url ? (
+                      <a href={resource.url} target="_blank" rel="noopener noreferrer" class="text-ldd-blue hover:underline">
+                        {resource.title}
+                      </a>
+                    ) : (
+                      <span>{resource.title}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>Contact your local SEN specialist or disability support services for more information and support.</p>
+            )}
+          </ContentSection>
+
+          {difficulty.faqs && difficulty.faqs.length > 0 && (
+            <ContentSection title="FAQs" icon="ℹ️" id="faqs">
+              <div class="space-y-6">
+                {difficulty.faqs.map(faq => (
+                  <div>
+                    <h4 class="font-semibold text-ldd-gray-dark mb-2">{faq.question}</h4>
+                    <p>{faq.answer}</p>
+                  </div>
+                ))}
+              </div>
+            </ContentSection>
+          )}
+
+          <!-- Related behaviours -->
+          <div>
+            <h2 class="text-xl font-semibold text-ldd-gray-dark mb-4">Related behaviours</h2>
+            <div class="grid sm:grid-cols-2 gap-4">
+              {difficulty.relatedBehaviours.map(behaviourId => {
+                const behaviour = getBehaviour(behaviourId);
+                return behaviour && (
+                  <a
+                    href={`/behaviours/${behaviourId}`}
+                    class="block bg-white border border-gray-200 rounded p-4 hover:border-ldd-blue hover:shadow-sm transition-all"
+                  >
+                    <h3 class="font-semibold text-ldd-gray-dark mb-1">{behaviour.title}</h3>
+                    <p class="text-sm text-gray-600 line-clamp-2">{behaviour.difficulty}</p>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="hidden lg:block">
+          <NavigationSidebar items={sidebarItems} />
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,87 @@
+---
+const difficultiesLinks = [
+  { href: '/difficulties/dyslexia', label: 'Dyslexia' },
+  { href: '/difficulties/autism', label: 'Autism' },
+  { href: '/difficulties/adhd', label: 'ADHD' },
+  { href: '/difficulties/dyspraxia', label: 'Dyspraxia' },
+];
+
+const strategiesLinks = [
+  { href: '/strategies/colour-coded-calendars', label: 'Colour coded calendars' },
+  { href: '/strategies/easy-read', label: 'Easy read materials' },
+  { href: '/strategies/visual-supports', label: 'Visual supports' },
+  { href: '/strategies/extra-time', label: 'Give extra time' },
+];
+
+const aboutLinks = [
+  { href: '/about', label: 'About the site' },
+  { href: '/resources', label: 'Resources' },
+  { href: '/about#partners', label: 'Partners' },
+];
+---
+
+<footer class="bg-ldd-gray-dark text-white mt-auto">
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <!-- Difficulties -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Difficulties</h3>
+        <ul class="space-y-2">
+          {difficultiesLinks.map(link => (
+            <li>
+              <a href={link.href} class="text-gray-300 hover:text-white transition-colors">
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Strategies -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Strategies</h3>
+        <ul class="space-y-2">
+          {strategiesLinks.map(link => (
+            <li>
+              <a href={link.href} class="text-gray-300 hover:text-white transition-colors">
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- About -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">About</h3>
+        <ul class="space-y-2">
+          {aboutLinks.map(link => (
+            <li>
+              <a href={link.href} class="text-gray-300 hover:text-white transition-colors">
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Supported by -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Supported by</h3>
+        <div class="space-y-4">
+          <div class="bg-gray-500/30 rounded p-4 text-sm text-gray-300">
+            Dyslexia Action
+          </div>
+          <div class="bg-gray-500/30 rounded p-4 text-sm text-gray-300">
+            National Autistic Society
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-gray-600 mt-8 pt-8 text-center text-gray-400 text-sm">
+      <p>LDD Navigator - Learning Difficulties and Disabilities in the Justice System</p>
+      <p class="mt-2">A resource for prison staff and professionals</p>
+    </div>
+  </div>
+</footer>

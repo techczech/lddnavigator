@@ -1,0 +1,47 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { difficulties } from '../../data/difficulties';
+---
+
+<Layout title="Difficulties">
+  <PageHeader
+    title="Difficulties"
+    icon="🧩"
+    color="green"
+    breadcrumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'Difficulties' },
+    ]}
+  />
+
+  <section class="py-12">
+    <div class="max-w-5xl mx-auto px-4">
+      <p class="text-lg text-gray-600 mb-8">
+        Understanding different learning difficulties and disabilities can help you recognise when someone may need additional support. Click on any difficulty below to learn more about what it is, what to look out for, and what strategies can help.
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        {difficulties.map(diff => (
+          <a
+            href={`/difficulties/${diff.id}`}
+            class="block bg-white border border-gray-200 rounded-lg p-6 hover:border-ldd-green hover:shadow-md transition-all card-hover"
+          >
+            <h2 class="text-xl font-semibold text-ldd-gray-dark mb-2">{diff.title}</h2>
+            <p class="text-gray-600 mb-4">{diff.shortDescription}</p>
+            <div class="flex flex-wrap gap-2">
+              {diff.relatedBehaviours.slice(0, 3).map(b => (
+                <span class="bg-ldd-blue/10 text-ldd-blue text-xs px-2 py-1 rounded">
+                  {b.replace(/-/g, ' ')}
+                </span>
+              ))}
+            </div>
+            <span class="inline-block mt-4 text-ldd-green font-medium text-sm">
+              Learn more &rarr;
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>

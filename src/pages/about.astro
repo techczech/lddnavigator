@@ -1,0 +1,94 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+---
+
+<Layout title="About">
+  <PageHeader
+    title="About LDD Navigator"
+    icon="ℹ️"
+    color="green"
+    breadcrumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'About' },
+    ]}
+  />
+
+  <section class="py-12">
+    <div class="max-w-3xl mx-auto px-4">
+      <div class="prose prose-lg max-w-none">
+        <h2 class="text-2xl font-semibold text-ldd-gray-dark mb-4">About Us</h2>
+        <p class="text-gray-600 mb-6">
+          LDD Navigator is a resource for prison staff and professionals working with offenders who have learning difficulties and disabilities. We provide practical strategies, information about different conditions, and resources to help you support people more effectively.
+        </p>
+        <p class="text-gray-600 mb-8">
+          The site was developed in partnership with leading organisations in the field of learning difficulties, including Dyslexia Action and the National Autistic Society.
+        </p>
+
+        <h2 id="site" class="text-2xl font-semibold text-ldd-gray-dark mb-4">About This Site</h2>
+        <p class="text-gray-600 mb-6">
+          This website helps you identify behaviours that may indicate a learning difficulty, understand what might be causing them, and find strategies to help. You can navigate the site in several ways:
+        </p>
+        <ul class="list-disc pl-6 space-y-2 text-gray-600 mb-8">
+          <li><strong>By Behaviour:</strong> Start with what you're observing. Select a behaviour like "always late" or "can't follow instructions" to learn what might be causing it and what you can do.</li>
+          <li><strong>By Difficulty:</strong> If you know or suspect someone has a particular difficulty like dyslexia or autism, start there to understand what to look out for and how to help.</li>
+          <li><strong>By Strategy:</strong> Browse practical strategies that you can implement immediately to support people with various difficulties.</li>
+        </ul>
+
+        <h2 class="text-2xl font-semibold text-ldd-gray-dark mb-4">Why This Matters</h2>
+        <p class="text-gray-600 mb-6">
+          Research suggests that a significant proportion of the prison population has some form of learning difficulty or disability. Many have never been diagnosed and may not even be aware of their condition.
+        </p>
+        <p class="text-gray-600 mb-8">
+          Understanding and accommodating these difficulties can:
+        </p>
+        <ul class="list-disc pl-6 space-y-2 text-gray-600 mb-8">
+          <li>Improve communication and reduce misunderstandings</li>
+          <li>Help people engage more effectively with programmes and services</li>
+          <li>Reduce frustration and challenging behaviour</li>
+          <li>Support rehabilitation and reduce reoffending</li>
+        </ul>
+
+        <h2 id="partners" class="text-2xl font-semibold text-ldd-gray-dark mb-4">Our Partners</h2>
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+          <div class="bg-gray-100 rounded-lg p-6">
+            <h3 class="font-semibold text-ldd-gray-dark mb-2">Dyslexia Action</h3>
+            <p class="text-gray-600 text-sm">
+              Dyslexia Action is a national charity and the UK's leading provider of services and support for people with dyslexia and literacy difficulties.
+            </p>
+          </div>
+          <div class="bg-gray-100 rounded-lg p-6">
+            <h3 class="font-semibold text-ldd-gray-dark mb-2">National Autistic Society</h3>
+            <p class="text-gray-600 text-sm">
+              The National Autistic Society is the UK's leading charity for autistic people. They provide support, information and training.
+            </p>
+          </div>
+        </div>
+
+        <h2 class="text-2xl font-semibold text-ldd-gray-dark mb-4">Contact Us</h2>
+        <p class="text-gray-600 mb-6">
+          If you have questions, suggestions, or would like to contribute to this resource, please get in touch.
+        </p>
+        <div class="bg-white border border-gray-200 rounded-lg p-6">
+          <form class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-ldd-green" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-ldd-green" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+              <textarea rows="4" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-ldd-green"></textarea>
+            </div>
+            <button type="submit" class="bg-ldd-green text-white px-6 py-2 rounded hover:bg-ldd-green-dark transition-colors">
+              Send message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,47 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { strategies } from '../../data/strategies';
+---
+
+<Layout title="Strategies">
+  <PageHeader
+    title="Strategies"
+    icon="💡"
+    color="orange"
+    breadcrumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'Strategies' },
+    ]}
+  />
+
+  <section class="py-12">
+    <div class="max-w-5xl mx-auto px-4">
+      <p class="text-lg text-gray-600 mb-8">
+        These practical strategies can help you support people with learning difficulties and disabilities. Many of these strategies are useful for multiple difficulties, so even without a diagnosis, they can make a real difference.
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        {strategies.map(strategy => (
+          <a
+            href={`/strategies/${strategy.id}`}
+            class="block bg-white border-l-4 border-ldd-orange rounded-lg p-6 shadow-sm hover:shadow-md transition-all card-hover"
+          >
+            <h2 class="text-xl font-semibold text-ldd-gray-dark mb-2">{strategy.title}</h2>
+            <p class="text-gray-600 mb-4 line-clamp-3">{strategy.description}</p>
+            <div class="flex flex-wrap gap-2">
+              {strategy.relatedDifficulties.slice(0, 3).map(d => (
+                <span class="bg-ldd-green/10 text-ldd-green text-xs px-2 py-1 rounded capitalize">
+                  {d}
+                </span>
+              ))}
+            </div>
+            <span class="inline-block mt-4 text-ldd-orange font-medium text-sm">
+              Learn more &rarr;
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>

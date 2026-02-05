@@ -1,0 +1,58 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  href?: string;
+  icon?: string;
+  color?: 'orange' | 'green' | 'blue';
+}
+
+const { title, description, href, icon, color = 'orange' } = Astro.props;
+
+const borderColors = {
+  orange: 'border-ldd-orange',
+  green: 'border-ldd-green',
+  blue: 'border-ldd-blue',
+};
+
+const hoverColors = {
+  orange: 'hover:border-ldd-orange-dark',
+  green: 'hover:border-ldd-green-dark',
+  blue: 'hover:border-ldd-blue-dark',
+};
+---
+
+{href ? (
+  <a
+    href={href}
+    class:list={[
+      'block bg-white border-l-4 rounded shadow-sm p-5 card-hover',
+      borderColors[color],
+      hoverColors[color],
+    ]}
+  >
+    <div class="flex items-start gap-3">
+      {icon && <span class="text-2xl flex-shrink-0">{icon}</span>}
+      <div>
+        <h3 class="font-semibold text-ldd-gray-dark mb-1">{title}</h3>
+        {description && <p class="text-gray-600 text-sm">{description}</p>}
+      </div>
+    </div>
+  </a>
+) : (
+  <div
+    class:list={[
+      'bg-white border-l-4 rounded shadow-sm p-5',
+      borderColors[color],
+    ]}
+  >
+    <div class="flex items-start gap-3">
+      {icon && <span class="text-2xl flex-shrink-0">{icon}</span>}
+      <div>
+        <h3 class="font-semibold text-ldd-gray-dark mb-1">{title}</h3>
+        {description && <p class="text-gray-600 text-sm">{description}</p>}
+        <slot />
+      </div>
+    </div>
+  </div>
+)}

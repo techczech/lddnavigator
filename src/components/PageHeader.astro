@@ -1,0 +1,41 @@
+---
+interface Props {
+  title: string;
+  icon?: string;
+  color?: 'orange' | 'green' | 'blue';
+  breadcrumbs?: { label: string; href?: string }[];
+}
+
+const { title, icon, color = 'orange', breadcrumbs } = Astro.props;
+
+const colorClasses = {
+  orange: 'bg-ldd-orange',
+  green: 'bg-ldd-green',
+  blue: 'bg-ldd-blue',
+};
+---
+
+<div class="bg-gray-100 border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 py-4">
+    {breadcrumbs && (
+      <nav class="text-sm mb-2">
+        <ol class="flex items-center gap-2">
+          {breadcrumbs.map((crumb, index) => (
+            <>
+              {index > 0 && <span class="text-gray-400">&raquo;</span>}
+              {crumb.href ? (
+                <a href={crumb.href} class="text-ldd-blue hover:underline">{crumb.label}</a>
+              ) : (
+                <span class="text-gray-600">{crumb.label}</span>
+              )}
+            </>
+          ))}
+        </ol>
+      </nav>
+    )}
+    <div class={`inline-flex items-center gap-3 ${colorClasses[color]} text-white px-5 py-2 rounded`}>
+      {icon && <span class="text-2xl">{icon}</span>}
+      <h1 class="text-xl md:text-2xl font-semibold">{title}</h1>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { behaviours } from '../../data/behaviours';
+---
+
+<Layout title="Behaviours">
+  <PageHeader
+    title="Behaviours"
+    icon="🔄"
+    color="blue"
+    breadcrumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'Behaviours' },
+    ]}
+  />
+
+  <section class="py-12">
+    <div class="max-w-5xl mx-auto px-4">
+      <p class="text-lg text-gray-600 mb-8">
+        These behaviours may indicate that someone has a learning difficulty or disability. Click on any behaviour to learn more about what might be causing it and what strategies can help.
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        {behaviours.map(behaviour => (
+          <a
+            href={`/behaviours/${behaviour.id}`}
+            class="block bg-white border-l-4 border-ldd-blue rounded-lg p-6 shadow-sm hover:shadow-md transition-all card-hover"
+          >
+            <div class="flex items-start gap-4">
+              <span class="text-3xl">⏰</span>
+              <div>
+                <h2 class="text-xl font-semibold text-ldd-gray-dark mb-2">{behaviour.title}</h2>
+                <p class="text-gray-600 mb-4 line-clamp-2">{behaviour.difficulty}</p>
+                <div class="flex flex-wrap gap-2">
+                  {behaviour.relatedDifficulties.map(d => (
+                    <span class="bg-ldd-green/10 text-ldd-green text-xs px-2 py-1 rounded capitalize">
+                      {d}
+                    </span>
+                  ))}
+                </div>
+                <span class="inline-block mt-4 text-ldd-blue font-medium text-sm">
+                  Learn more &rarr;
+                </span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,25 @@
+---
+interface Props {
+  title: string;
+  icon?: string;
+  id?: string;
+}
+
+const { title, icon, id } = Astro.props;
+---
+
+<section id={id} class="mb-8">
+  <div class="flex items-start gap-4">
+    {icon && (
+      <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center text-4xl text-ldd-gray-dark">
+        <span>{icon}</span>
+      </div>
+    )}
+    <div class="flex-1">
+      <h2 class="text-xl font-semibold text-ldd-gray-dark mb-3">{title}</h2>
+      <div class="text-gray-600 leading-relaxed space-y-4">
+        <slot />
+      </div>
+    </div>
+  </div>
+</section>

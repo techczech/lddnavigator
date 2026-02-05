@@ -1,0 +1,99 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import ContentSection from '../../components/ContentSection.astro';
+import NavigationSidebar from '../../components/NavigationSidebar.astro';
+import { behaviours, getBehaviour } from '../../data/behaviours';
+import { getDifficulty } from '../../data/difficulties';
+import { getStrategy } from '../../data/strategies';
+
+export function getStaticPaths() {
+  return behaviours.map(behaviour => ({
+    params: { id: behaviour.id },
+  }));
+}
+
+const { id } = Astro.params;
+const behaviour = getBehaviour(id);
+
+if (!behaviour) {
+  return Astro.redirect('/behaviours');
+}
+
+const sidebarItems = [
+  { label: 'Behaviour', href: '#behaviour', icon: '🔄', color: 'blue' as const, active: true },
+  { label: 'Difficulty', href: '#difficulty', icon: '🧩', color: 'green' as const },
+  { label: 'Strategies', href: '#strategies', icon: '💡', color: 'orange' as const },
+];
+---
+
+<Layout title={behaviour.title}>
+  <PageHeader
+    title={behaviour.title}
+    icon="⏰"
+    color="blue"
+    breadcrumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'Behaviours', href: '/behaviours' },
+      { label: behaviour.title },
+    ]}
+  />
+
+  <section class="py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid lg:grid-cols-4 gap-8">
+        <!-- Main content -->
+        <div class="lg:col-span-3 space-y-12">
+          <ContentSection title="Behaviour" icon="🔄" id="behaviour">
+            {behaviour.description.split('\n\n').map(para => (
+              <p>{para}</p>
+            ))}
+          </ContentSection>
+
+          <ContentSection title="Difficulty" icon="🧩" id="difficulty">
+            <p class="mb-6">{behaviour.difficulty}</p>
+
+            <h3 class="font-semibold text-ldd-gray-dark mb-3">Related difficulties</h3>
+            <div class="flex flex-wrap gap-2">
+              {behaviour.relatedDifficulties.map(diffId => {
+                const difficulty = getDifficulty(diffId);
+                return difficulty && (
+                  <a
+                    href={`/difficulties/${diffId}`}
+                    class="bg-ldd-green text-white px-3 py-2 rounded hover:bg-ldd-green-dark transition-colors"
+                  >
+                    {difficulty.title}
+                  </a>
+                );
+              })}
+            </div>
+          </ContentSection>
+
+          <ContentSection title="Strategies" icon="💡" id="strategies">
+            <p class="mb-6">There are many strategies you can use. Not all of them will work with all people. You should focus on helping your client identify the right strategies that will help them compensate for their learning difficulty.</p>
+
+            <div class="grid sm:grid-cols-2 gap-4">
+              {behaviour.strategies.map(strategyId => {
+                const strategy = getStrategy(strategyId);
+                return strategy && (
+                  <a
+                    href={`/strategies/${strategyId}`}
+                    class="block bg-white border border-gray-200 rounded p-4 hover:border-ldd-orange hover:shadow-sm transition-all"
+                  >
+                    <h3 class="font-semibold text-ldd-gray-dark mb-1">{strategy.title}</h3>
+                    <p class="text-sm text-gray-600 line-clamp-2">{strategy.description}</p>
+                  </a>
+                );
+              })}
+            </div>
+          </ContentSection>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="hidden lg:block">
+          <NavigationSidebar items={sidebarItems} />
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

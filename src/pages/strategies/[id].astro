@@ -1,0 +1,121 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import ContentSection from '../../components/ContentSection.astro';
+import NavigationSidebar from '../../components/NavigationSidebar.astro';
+import { strategies, getStrategy } from '../../data/strategies';
+import { getDifficulty } from '../../data/difficulties';
+import { getBehaviour } from '../../data/behaviours';
+
+export function getStaticPaths() {
+  return strategies.map(strategy => ({
+    params: { id: strategy.id },
+  }));
+}
+
+const { id } = Astro.params;
+const strategy = getStrategy(id);
+
+if (!strategy) {
+  return Astro.redirect('/strategies');
+}
+
+const sidebarItems = [
+  { label: 'Strategy', href: '#strategy', icon: '💡', color: 'orange' as const, active: true },
+  { label: 'Behaviours', href: '#behaviours', icon: '🔄', color: 'blue' as const },
+  { label: 'Resources', href: '#resources', icon: '📁', color: 'green' as const },
+];
+---
+
+<Layout title={strategy.title}>
+  <PageHeader
+    title={strategy.title}
+    icon="📅"
+    color="orange"
+    breadcrumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'Strategies', href: '/strategies' },
+      { label: strategy.title },
+    ]}
+  />
+
+  <section class="py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid lg:grid-cols-4 gap-8">
+        <!-- Main content -->
+        <div class="lg:col-span-3 space-y-12">
+          <ContentSection title="Strategy" icon="🧩" id="strategy">
+            {strategy.description.split('\n\n').map(para => (
+              <p>{para}</p>
+            ))}
+
+            <h3 class="font-semibold text-ldd-gray-dark mt-6 mb-3">You can also try:</h3>
+            <ul class="list-disc pl-6 space-y-1">
+              {strategy.howTo.map(item => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </ContentSection>
+
+          <ContentSection title="Related difficulties and behaviours" icon="🔄" id="behaviours">
+            <p class="mb-4">This strategy can be helpful with these difficulties and behaviours:</p>
+
+            <div class="grid sm:grid-cols-2 gap-4 mb-6">
+              {strategy.relatedBehaviours.map(behaviourId => {
+                const behaviour = getBehaviour(behaviourId);
+                return behaviour && (
+                  <a
+                    href={`/behaviours/${behaviourId}`}
+                    class="flex items-center gap-3 bg-ldd-blue/10 rounded p-3 hover:bg-ldd-blue/20 transition-colors"
+                  >
+                    <span class="text-ldd-blue">⏰</span>
+                    <span class="text-ldd-gray-dark">{behaviour.title}</span>
+                  </a>
+                );
+              })}
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+              {strategy.relatedDifficulties.map(diffId => {
+                const difficulty = getDifficulty(diffId);
+                return difficulty && (
+                  <a
+                    href={`/difficulties/${diffId}`}
+                    class="bg-ldd-green text-white px-3 py-1 rounded text-sm hover:bg-ldd-green-dark transition-colors"
+                  >
+                    {difficulty.title}
+                  </a>
+                );
+              })}
+            </div>
+          </ContentSection>
+
+          <ContentSection title="Resources" icon="📁" id="resources">
+            <p class="mb-4">Here are some resources you can draw on to help you with this strategy:</p>
+            {strategy.resources && strategy.resources.length > 0 ? (
+              <ul class="space-y-3">
+                {strategy.resources.map(resource => (
+                  <li class="flex items-center gap-3">
+                    <span class="text-ldd-orange">
+                      {resource.type === 'download' ? '📥' : resource.type === 'webpage' ? '🌐' : '📄'}
+                    </span>
+                    <a href="#" class="text-ldd-blue hover:underline">
+                      {resource.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No specific resources available for this strategy yet. Check the general resources page for more information.</p>
+            )}
+          </ContentSection>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="hidden lg:block">
+          <NavigationSidebar items={sidebarItems} />
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
