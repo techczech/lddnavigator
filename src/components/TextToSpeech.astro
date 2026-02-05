@@ -27,6 +27,16 @@
         </svg>
       </button>
       <button
+        id="tts-skip-btn"
+        class="tts-btn bg-ldd-blue text-white"
+        aria-label="Skip to next"
+        title="Skip to next sentence"
+      >
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M4.5 3.5A.5.5 0 015 4v3.248l6.267-3.636c.54-.313 1.233.066 1.233.696v11.384c0 .63-.692 1.01-1.233.696L5 12.752V16a.5.5 0 01-1 0V4a.5.5 0 01.5-.5zm9.5.5a.5.5 0 011 0v12a.5.5 0 01-1 0V4z"/>
+        </svg>
+      </button>
+      <button
         id="tts-stop-btn"
         class="tts-btn bg-gray-500 text-white"
         aria-label="Stop"
@@ -63,7 +73,7 @@
   </svg>
 </button>
 
-<style>
+<style is:global>
   .tts-btn {
     display: flex;
     align-items: center;
@@ -82,7 +92,7 @@
   }
 
   .tts-btn:focus {
-    outline: 2px solid var(--color-ldd-green);
+    outline: 2px solid #6b8c3a;
     outline-offset: 2px;
   }
 
@@ -93,96 +103,61 @@
   }
 
   .tts-active .tts-hoverable:hover {
-    background-color: rgba(79, 170, 216, 0.1);
-    outline: 3px dashed var(--color-ldd-blue);
+    background-color: rgba(79, 170, 216, 0.15) !important;
+    outline: 3px dashed #4faad8 !important;
     outline-offset: 4px;
     cursor: pointer;
     border-radius: 4px;
   }
 
-  .tts-active .tts-hoverable:hover::after {
-    content: '🔊 Click to read';
-    position: absolute;
-    top: -1.75rem;
-    left: 0;
-    background: var(--color-ldd-blue);
-    color: white;
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    white-space: nowrap;
-    z-index: 100;
-    pointer-events: none;
-  }
-
   /* Currently speaking indicator - animated pulse */
   .tts-speaking {
-    outline: 3px solid var(--color-ldd-green) !important;
+    outline: 4px solid #6b8c3a !important;
     outline-offset: 4px;
-    background-color: rgba(107, 140, 58, 0.15) !important;
+    background-color: rgba(107, 140, 58, 0.2) !important;
     border-radius: 4px;
     animation: tts-pulse 1.5s ease-in-out infinite;
+    position: relative;
   }
 
   @keyframes tts-pulse {
     0%, 100% {
-      outline-color: var(--color-ldd-green);
-      background-color: rgba(107, 140, 58, 0.15);
+      outline-color: #6b8c3a;
+      background-color: rgba(107, 140, 58, 0.2);
     }
     50% {
-      outline-color: rgba(107, 140, 58, 0.6);
-      background-color: rgba(107, 140, 58, 0.08);
+      outline-color: #5a7830;
+      background-color: rgba(107, 140, 58, 0.1);
     }
-  }
-
-  /* Speaking icon indicator */
-  .tts-speaking::before {
-    content: '🔊';
-    position: absolute;
-    top: -1.75rem;
-    left: 0;
-    background: var(--color-ldd-green);
-    color: white;
-    font-size: 0.875rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    z-index: 100;
-    animation: tts-icon-pulse 0.8s ease-in-out infinite;
-  }
-
-  @keyframes tts-icon-pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-  }
-
-  /* Make speaking elements position relative for the icon */
-  .tts-speaking {
-    position: relative;
   }
 </style>
 
-<script>
+<script is:inline>
   // Check if speech synthesis is supported
-  const synth = window.speechSynthesis;
-  const isTTSSupported = 'speechSynthesis' in window;
+  (function() {
+    const synth = window.speechSynthesis;
+    const isTTSSupported = 'speechSynthesis' in window;
 
-  if (!isTTSSupported) {
-    // Hide TTS button if not supported
-    const toggleBtn = document.getElementById('tts-toggle-btn');
-    if (toggleBtn) toggleBtn.style.display = 'none';
-  } else {
+    if (!isTTSSupported) {
+      // Hide TTS button if not supported
+      const toggleBtn = document.getElementById('tts-toggle-btn');
+      if (toggleBtn) toggleBtn.style.display = 'none';
+      return;
+    }
+
     const toggleBtn = document.getElementById('tts-toggle-btn');
     const panel = document.getElementById('tts-panel');
     const playBtn = document.getElementById('tts-play-btn');
     const pauseBtn = document.getElementById('tts-pause-btn');
+    const skipBtn = document.getElementById('tts-skip-btn');
     const stopBtn = document.getElementById('tts-stop-btn');
     const closeBtn = document.getElementById('tts-close-btn');
     const statusEl = document.getElementById('tts-status');
 
-    let currentUtterance: SpeechSynthesisUtterance | null = null;
-    let currentElement: Element | null = null;
+    let currentUtterance = null;
+    let currentElement = null;
     let isActive = false;
-    let textQueue: string[] = [];
+    let textQueue = [];
     let queueIndex = 0;
 
     // Mark content sections as speakable and hoverable
@@ -208,14 +183,14 @@
       ];
 
       // Mark all content blocks
-      document.querySelectorAll(blockSelectors.join(', ')).forEach(el => {
+      document.querySelectorAll(blockSelectors.join(', ')).forEach(function(el) {
         // Skip if inside the TTS panel or if it's a navigation/UI element
         if (el.closest('#tts-panel') || el.closest('#tts-toggle-btn') || el.closest('nav') || el.closest('header') || el.closest('footer')) {
           return;
         }
 
         // Only mark if it has meaningful text content
-        const text = (el.textContent || '').trim();
+        var text = (el.textContent || '').trim();
         if (text.length > 10) {
           el.setAttribute('data-tts-block', 'true');
           el.classList.add('tts-hoverable');
@@ -223,16 +198,16 @@
       });
     }
 
-    function getTextContent(element: Element): string {
+    function getTextContent(element) {
       // Clone to avoid modifying original
-      const clone = element.cloneNode(true) as Element;
+      const clone = element.cloneNode(true);
       // Remove script and style elements
-      clone.querySelectorAll('script, style, [aria-hidden="true"]').forEach(el => el.remove());
+      clone.querySelectorAll('script, style, [aria-hidden="true"]').forEach(function(el) { el.remove(); });
       // Get text content, clean up whitespace
       return (clone.textContent || '').replace(/\s+/g, ' ').trim();
     }
 
-    function speak(text: string, element?: Element) {
+    function speak(text, element) {
       if (!text) return;
 
       // Cancel any ongoing speech
@@ -282,7 +257,7 @@
       if (statusEl) statusEl.textContent = text.substring(0, 30) + (text.length > 30 ? '...' : '');
     }
 
-    function speakElement(element: Element) {
+    function speakElement(element) {
       const text = getTextContent(element);
       if (text) {
         textQueue = [text];
@@ -303,8 +278,8 @@
         textQueue = [];
 
         // Group sentences into reasonable chunks (about 200 chars each)
-        let chunk = '';
-        sentences.forEach(sentence => {
+        var chunk = '';
+        sentences.forEach(function(sentence) {
           if (chunk.length + sentence.length < 200) {
             chunk += sentence;
           } else {
@@ -341,7 +316,7 @@
         currentElement.classList.remove('tts-speaking');
       }
       // Remove hoverable class when deactivating
-      document.querySelectorAll('.tts-hoverable').forEach(el => {
+      document.querySelectorAll('.tts-hoverable').forEach(function(el) {
         el.classList.remove('tts-hoverable');
       });
       if (playBtn) playBtn.classList.remove('hidden');
@@ -351,14 +326,14 @@
     }
 
     // Event listeners
-    toggleBtn?.addEventListener('click', () => {
+    toggleBtn?.addEventListener('click', function() {
       showPanel();
       if (statusEl) statusEl.textContent = 'Click any section or press Play for whole page';
     });
 
     closeBtn?.addEventListener('click', hidePanel);
 
-    playBtn?.addEventListener('click', () => {
+    playBtn?.addEventListener('click', function() {
       if (synth.paused) {
         synth.resume();
         if (playBtn) playBtn.classList.add('hidden');
@@ -368,13 +343,13 @@
       }
     });
 
-    pauseBtn?.addEventListener('click', () => {
+    pauseBtn?.addEventListener('click', function() {
       synth.pause();
       if (playBtn) playBtn.classList.remove('hidden');
       if (pauseBtn) pauseBtn.classList.add('hidden');
     });
 
-    stopBtn?.addEventListener('click', () => {
+    stopBtn?.addEventListener('click', function() {
       synth.cancel();
       if (currentElement) {
         currentElement.classList.remove('tts-speaking');
@@ -386,11 +361,30 @@
       if (statusEl) statusEl.textContent = 'Stopped';
     });
 
+    skipBtn?.addEventListener('click', function() {
+      // Skip to next sentence/chunk
+      synth.cancel();
+      if (currentElement) {
+        currentElement.classList.remove('tts-speaking');
+      }
+      if (queueIndex < textQueue.length - 1) {
+        queueIndex++;
+        speak(textQueue[queueIndex]);
+        if (statusEl) statusEl.textContent = 'Skipped to next (' + (queueIndex + 1) + '/' + textQueue.length + ')';
+      } else {
+        if (playBtn) playBtn.classList.remove('hidden');
+        if (pauseBtn) pauseBtn.classList.add('hidden');
+        if (statusEl) statusEl.textContent = 'Finished';
+        textQueue = [];
+        queueIndex = 0;
+      }
+    });
+
     // Click on content to read it
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', function(e) {
       if (!isActive) return;
 
-      const target = e.target as Element;
+      const target = e.target;
 
       // Ignore clicks on the TTS panel itself
       if (target.closest('#tts-panel') || target.closest('#tts-toggle-btn')) return;
@@ -416,10 +410,10 @@
     });
 
     // Keyboard shortcut: Escape to close
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape' && isActive) {
         hidePanel();
       }
     });
-  }
+  })();
 </script>
