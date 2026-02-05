@@ -1,40 +1,57 @@
 ---
-interface HeroItem {
-  title: string;
-  icon: string;
-  href: string;
-  color: 'orange' | 'green' | 'blue';
-}
-
-const items: HeroItem[] = [
-  { title: 'What are the signs?', icon: '👁️', href: '/behaviours', color: 'orange' },
-  { title: 'What do I do?', icon: '📋', href: '/strategies', color: 'green' },
-  { title: 'Who do I tell?', icon: '💬', href: '/resources', color: 'blue' },
-];
-
-const bgColors = {
-  orange: 'bg-ldd-orange hover:bg-ldd-orange-dark',
-  green: 'bg-ldd-green hover:bg-ldd-green-dark',
-  blue: 'bg-ldd-blue hover:bg-ldd-blue-dark',
-};
+import { Eye, ClipboardList, MessageCircle } from '@lucide/astro';
 ---
 
-<section class="bg-gray-100 py-12">
+<section class="bg-ldd-gray-light py-8">
   <div class="max-w-5xl mx-auto px-4">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {items.map(item => (
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- What are the signs? -->
+      <div class="flex flex-col items-center">
+        <div class="bg-ldd-orange text-white px-6 py-2 rounded-full text-sm font-semibold mb-6">
+          What are the signs?
+        </div>
+        <div class="mb-6">
+          <Eye class="w-24 h-24 text-ldd-gray-dark stroke-[1.5]" />
+        </div>
         <a
-          href={item.href}
-          class:list={[
-            'group flex flex-col items-center p-8 rounded-lg text-white transition-all card-hover',
-            bgColors[item.color],
-          ]}
+          href="/behaviours"
+          class="bg-ldd-orange text-white px-4 py-2 rounded text-sm font-medium hover:bg-ldd-orange-dark transition-colors flex items-center gap-2"
         >
-          <div class="text-6xl mb-4 group-hover:scale-110 transition-transform">{item.icon}</div>
-          <span class="text-lg font-semibold text-center">{item.title}</span>
-          <span class="mt-2 text-sm opacity-80 group-hover:opacity-100">Learn more &rarr;</span>
+          What are the signs <span>&rarr;</span>
         </a>
-      ))}
+      </div>
+
+      <!-- What do I do? -->
+      <div class="flex flex-col items-center">
+        <div class="bg-ldd-green text-white px-6 py-2 rounded-full text-sm font-semibold mb-6">
+          What do I do?
+        </div>
+        <div class="mb-6">
+          <ClipboardList class="w-24 h-24 text-ldd-gray-dark stroke-[1.5]" />
+        </div>
+        <a
+          href="/strategies"
+          class="bg-ldd-green text-white px-4 py-2 rounded text-sm font-medium hover:bg-ldd-green-dark transition-colors flex items-center gap-2"
+        >
+          What do I do <span>&rarr;</span>
+        </a>
+      </div>
+
+      <!-- Who do I tell? -->
+      <div class="flex flex-col items-center">
+        <div class="bg-ldd-blue text-white px-6 py-2 rounded-full text-sm font-semibold mb-6">
+          Who do I tell?
+        </div>
+        <div class="mb-6">
+          <MessageCircle class="w-24 h-24 text-ldd-gray-dark stroke-[1.5]" />
+        </div>
+        <a
+          href="/resources"
+          class="bg-ldd-blue text-white px-4 py-2 rounded text-sm font-medium hover:bg-ldd-blue-dark transition-colors flex items-center gap-2"
+        >
+          Who do I tell <span>&rarr;</span>
+        </a>
+      </div>
     </div>
   </div>
 </section>

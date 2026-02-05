@@ -1,76 +1,149 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import HeroSection from '../components/HeroSection.astro';
-import Card from '../components/Card.astro';
 import { difficulties } from '../data/difficulties';
 import { behaviours } from '../data/behaviours';
-import { strategies } from '../data/strategies';
+import { strategies, getStrategy } from '../data/strategies';
+import { getDifficulty } from '../data/difficulties';
+import {
+  PersonStanding,
+  Puzzle,
+  Clock,
+  Snail,
+  EyeOff,
+  FileQuestion,
+  X,
+  Angry,
+  PlusCircle,
+  ChevronRight,
+} from '@lucide/astro';
 
 const featuredBehaviours = behaviours.slice(0, 6);
-const featuredStrategies = strategies.slice(0, 3);
+
+// Build data for client-side
+const behavioursData = featuredBehaviours.map(b => ({
+  id: b.id,
+  title: b.title,
+  description: b.description.split('\n\n')[0],
+  difficulty: b.difficulty,
+  strategies: b.strategies.map(sId => {
+    const s = getStrategy(sId);
+    return s ? { id: s.id, title: s.title } : null;
+  }).filter(Boolean),
+  relatedDifficulties: b.relatedDifficulties.map(dId => {
+    const d = getDifficulty(dId);
+    return d ? { id: d.id, title: d.title } : null;
+  }).filter(Boolean),
+}));
 ---
 
 <Layout title="Home">
   <HeroSection />
 
-  <!-- Did You Know -->
-  <section class="bg-ldd-orange text-white py-4">
-    <div class="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center gap-4">
-      <div class="font-bold text-lg whitespace-nowrap">DID YOU KNOW?</div>
-      <p class="text-sm md:text-base">
-        You can avoid an anxiety attack by spending an extra few minutes informing a person with autism about a change to routine.
-      </p>
+  <!-- Did You Know + Email signup -->
+  <section class="bg-white py-0">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="grid md:grid-cols-2">
+        <!-- Did You Know -->
+        <div class="bg-ldd-orange text-white py-4 px-6 flex items-center gap-4">
+          <div class="font-bold text-base whitespace-nowrap border-r border-white/30 pr-4">DID YOU<br/>KNOW?</div>
+          <p class="text-sm">
+            You can avoid an anxiety attack by spending an extra few minutes informing a person with autism about a change to routine.
+          </p>
+        </div>
+        <!-- Email signup -->
+        <div class="bg-ldd-gray-light py-4 px-6">
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-gray-600">Information and updates via email</span>
+          </div>
+          <div class="flex gap-2 mt-2">
+            <input
+              type="email"
+              placeholder="Email address"
+              class="flex-1 px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-ldd-green"
+            />
+            <button class="bg-ldd-gray-dark text-white px-4 py-2 rounded text-sm hover:bg-ldd-gray transition-colors">
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Behaviour Navigator -->
-  <section class="py-12 bg-white">
-    <div class="max-w-7xl mx-auto px-4">
-      <div class="grid lg:grid-cols-3 gap-8">
-        <!-- Left: Info cards -->
-        <div class="lg:col-span-2 space-y-6">
-          <Card title="Behaviour" icon="🔄" color="blue">
-            <p>Your client is always late for meetings no matter how important.</p>
-            <p class="mt-2 text-sm">Sometimes you feel like the client does not respect your time or does not care. Appropriately streamline proactive web services without one-to-one niche markets.</p>
-          </Card>
+  <section class="py-8 bg-white">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+        <div class="grid lg:grid-cols-5 gap-0">
+          <!-- Left: Info sections (dynamic content) -->
+          <div class="lg:col-span-3 p-6 space-y-6" id="behaviour-details">
+            <!-- Behaviour -->
+            <div class="flex gap-4">
+              <div class="flex-shrink-0 w-16">
+                <PersonStanding class="w-12 h-12 text-ldd-gray-dark" />
+              </div>
+              <div>
+                <h3 class="font-bold text-lg text-ldd-gray-dark mb-1">Behaviour</h3>
+                <p class="text-gray-600 text-sm" id="behaviour-text">Your client is always late for meetings no matter how important.</p>
+                <p class="text-gray-500 text-sm mt-2" id="behaviour-detail">Sometimes you feel like the client does not respect your time or does not care. You have told them not to be late, but they always are.</p>
+              </div>
+            </div>
 
-          <Card title="Difficulty" icon="🧩" color="green">
-            <p>Your client may have problems with reading notes, sequencing, understanding time or following instructions.</p>
-            <p class="mt-2 text-sm">This could be a sign of dyslexia, dyspraxia or ADHD. Compellingly conceptualize technically sound products rather than market positioning paradigms.</p>
-          </Card>
+            <!-- Difficulty -->
+            <div class="flex gap-4">
+              <div class="flex-shrink-0 w-16">
+                <Puzzle class="w-12 h-12 text-ldd-gray-dark" />
+              </div>
+              <div>
+                <h3 class="font-bold text-lg text-ldd-gray-dark mb-1">Difficulty</h3>
+                <p class="text-gray-600 text-sm" id="difficulty-text">Your client may have problems with reading notes, sequencing, understanding time or following instructions.</p>
+                <p class="text-gray-500 text-sm mt-2" id="difficulty-detail">This could be a sign of dyslexia, dyspraxia or ADHD.</p>
+              </div>
+            </div>
 
-          <Card title="Strategies" icon="💡" color="orange">
-            <p class="text-ldd-orange font-medium">Written reminders, Colour coded calendars with icons, mnemonic devices.</p>
-            <p class="mt-2 text-sm">Other strategies include: Compellingly conceptualize technically sound products rather than market positioning paradigms.</p>
-            <a href="/strategies" class="inline-block mt-3 bg-ldd-green text-white px-4 py-2 rounded text-sm hover:bg-ldd-green-dark transition-colors">
-              More strategies &rarr;
-            </a>
-          </Card>
-        </div>
+            <!-- Strategies -->
+            <div class="flex gap-4">
+              <div class="flex-shrink-0 w-16">
+                <Puzzle class="w-12 h-12 text-ldd-gray-dark" />
+              </div>
+              <div>
+                <h3 class="font-bold text-lg text-ldd-gray-dark mb-1">Strategies</h3>
+                <p class="text-ldd-orange font-medium text-sm" id="strategies-text">Written reminders, Colour coded calendars with icons, mnemonic devices.</p>
+                <p class="text-gray-500 text-sm mt-2">There are many strategies you can use. Focus on helping your client identify the right strategies for them.</p>
+                <a href="/strategies" class="inline-flex items-center gap-1 mt-3 bg-ldd-green text-white px-4 py-2 rounded text-sm hover:bg-ldd-green-dark transition-colors">
+                  More strategies <ChevronRight class="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+          </div>
 
-        <!-- Right: Behaviour list -->
-        <div>
-          <h3 class="text-lg font-semibold text-ldd-gray-dark mb-4">Common Behaviours</h3>
-          <div class="space-y-2">
-            {featuredBehaviours.map((behaviour, index) => (
+          <!-- Right: Behaviour list -->
+          <div class="lg:col-span-2 bg-white border-l border-gray-200">
+            <div class="space-y-0" id="behaviour-list">
+              {featuredBehaviours.map((behaviour, index) => (
+                <button
+                  type="button"
+                  data-behaviour-id={behaviour.id}
+                  class:list={[
+                    'behaviour-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all text-left',
+                    index === 0
+                      ? 'bg-white text-ldd-gray-dark border-b border-gray-200 active'
+                      : 'bg-ldd-blue text-white border-b border-ldd-blue-dark/20 hover:brightness-110',
+                  ]}
+                >
+                  <Clock class="w-5 h-5 flex-shrink-0" />
+                  <span class="flex-1">{behaviour.title}</span>
+                </button>
+              ))}
               <a
-                href={`/behaviours/${behaviour.id}`}
-                class:list={[
-                  'flex items-center gap-3 px-4 py-3 rounded text-white text-sm font-medium transition-all hover:translate-x-1',
-                  index === 0 ? 'bg-ldd-blue' : 'bg-ldd-blue/80 hover:bg-ldd-blue',
-                ]}
+                href="/behaviours"
+                class="flex items-center gap-3 px-4 py-3 bg-ldd-green text-white text-sm font-medium transition-all hover:bg-ldd-green-dark"
               >
-                <span class="text-lg">⏰</span>
-                <span>{behaviour.title}</span>
+                <PlusCircle class="w-5 h-5" />
+                <span>More</span>
               </a>
-            ))}
-            <a
-              href="/behaviours"
-              class="flex items-center gap-3 px-4 py-3 rounded bg-ldd-green text-white text-sm font-medium transition-all hover:bg-ldd-green-dark"
-            >
-              <span class="text-lg">➕</span>
-              <span>View all behaviours</span>
-            </a>
+            </div>
           </div>
         </div>
       </div>
@@ -78,57 +151,60 @@ const featuredStrategies = strategies.slice(0, 3);
   </section>
 
   <!-- Who Are You / Discussions / Login -->
-  <section class="py-8 bg-gray-100">
-    <div class="max-w-7xl mx-auto px-4">
-      <div class="grid md:grid-cols-3 gap-6">
+  <section class="py-6 bg-ldd-gray-light">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="grid md:grid-cols-3 gap-4">
         <!-- Who are you -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-          <div class="bg-ldd-orange text-white px-4 py-2 font-semibold">Who are you?</div>
+        <div class="bg-white rounded overflow-hidden shadow-sm">
+          <div class="bg-ldd-orange text-white px-4 py-2 text-sm font-semibold">Who are you?</div>
           <div class="p-4 space-y-3">
-            <a href="/resources#frontline" class="block text-ldd-gray-dark hover:text-ldd-orange transition-colors">
-              Front line prison workers &rarr;
+            <a href="/resources#frontline" class="flex items-center justify-between text-ldd-gray-dark hover:text-ldd-orange transition-colors text-sm">
+              <span>Front line prison workers</span>
+              <ChevronRight class="w-4 h-4" />
             </a>
-            <a href="/resources#specialist" class="block text-ldd-gray-dark hover:text-ldd-orange transition-colors">
-              Prison SEN Specialists &rarr;
+            <a href="/resources#specialist" class="flex items-center justify-between text-ldd-gray-dark hover:text-ldd-orange transition-colors text-sm">
+              <span>Prison SEN Specialists</span>
+              <ChevronRight class="w-4 h-4" />
             </a>
-            <a href="/resources#governor" class="block text-ldd-gray-dark hover:text-ldd-orange transition-colors">
-              Prison Governors &rarr;
+            <a href="/resources#governor" class="flex items-center justify-between text-ldd-gray-dark hover:text-ldd-orange transition-colors text-sm">
+              <span>Prison Governors</span>
+              <ChevronRight class="w-4 h-4" />
             </a>
           </div>
         </div>
 
         <!-- Latest Discussions -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-          <div class="bg-ldd-green text-white px-4 py-2 font-semibold">Latest Discussions</div>
+        <div class="bg-white rounded overflow-hidden shadow-sm">
+          <div class="bg-ldd-green text-white px-4 py-2 text-sm font-semibold">Latest Discussions</div>
           <div class="p-4 space-y-3">
-            <div class="flex justify-between items-start">
+            <div class="flex justify-between items-start gap-2">
               <a href="#" class="text-ldd-gray-dark hover:text-ldd-green transition-colors text-sm">How can I deal with this?</a>
-              <span class="text-xs text-gray-400">1 day ago</span>
+              <span class="text-xs text-gray-400 whitespace-nowrap">1 day ago</span>
             </div>
-            <div class="flex justify-between items-start">
+            <div class="flex justify-between items-start gap-2">
               <a href="#" class="text-ldd-gray-dark hover:text-ldd-green transition-colors text-sm">Who knows how to solve this?</a>
-              <span class="text-xs text-gray-400">1 day ago</span>
+              <span class="text-xs text-gray-400 whitespace-nowrap">1 day ago</span>
             </div>
-            <div class="flex justify-between items-start">
+            <div class="flex justify-between items-start gap-2">
               <a href="#" class="text-ldd-gray-dark hover:text-ldd-green transition-colors text-sm">I have a problem with getting a...</a>
-              <span class="text-xs text-gray-400">1 day ago</span>
+              <span class="text-xs text-gray-400 whitespace-nowrap">1 day ago</span>
             </div>
           </div>
         </div>
 
         <!-- Login -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-          <div class="bg-ldd-blue text-white px-4 py-2 font-semibold">Log In</div>
+        <div class="bg-white rounded overflow-hidden shadow-sm">
+          <div class="bg-ldd-blue text-white px-4 py-2 text-sm font-semibold">Log In</div>
           <div class="p-4">
-            <form class="space-y-3">
-              <input type="text" placeholder="Username" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-ldd-blue" />
-              <input type="password" placeholder="Password" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-ldd-blue" />
-              <a href="#" class="block text-sm text-ldd-blue hover:underline">Forgotten your Password?</a>
-              <button type="submit" class="w-full bg-ldd-orange text-white py-2 rounded hover:bg-ldd-orange-dark transition-colors">
-                Log in to your account &rarr;
+            <form class="space-y-2">
+              <input type="text" placeholder="Username" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-ldd-blue" />
+              <input type="password" placeholder="Password" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-ldd-blue" />
+              <a href="#" class="block text-xs text-ldd-blue hover:underline">Forgotten your Password?</a>
+              <button type="submit" class="w-full bg-ldd-orange text-white py-2 rounded text-sm hover:bg-ldd-orange-dark transition-colors flex items-center justify-center gap-1">
+                Log in to your account <ChevronRight class="w-4 h-4" />
               </button>
-              <button type="button" class="w-full border border-ldd-orange text-ldd-orange py-2 rounded hover:bg-ldd-orange hover:text-white transition-colors">
-                Sign up for an account &rarr;
+              <button type="button" class="w-full border border-ldd-orange text-ldd-orange py-2 rounded text-sm hover:bg-ldd-orange hover:text-white transition-colors flex items-center justify-center gap-1">
+                Sign up for an account <ChevronRight class="w-4 h-4" />
               </button>
             </form>
           </div>
@@ -138,49 +214,96 @@ const featuredStrategies = strategies.slice(0, 3);
   </section>
 
   <!-- About Sections -->
-  <section class="py-12 bg-white">
-    <div class="max-w-5xl mx-auto px-4 space-y-12">
+  <section class="py-8 bg-white">
+    <div class="max-w-5xl mx-auto px-4 space-y-8">
       <!-- About Us -->
-      <div class="grid md:grid-cols-3 gap-6 items-start">
-        <div class="bg-ldd-orange text-white px-4 py-2 rounded font-semibold inline-block">About Us</div>
-        <div class="md:col-span-2">
-          <p class="text-gray-600 mb-4">
-            LDD Navigator is a resource for prison staff and professionals working with offenders who have learning difficulties and disabilities. We provide practical strategies, information about different conditions, and resources to help you support people more effectively.
-          </p>
-          <a href="/about" class="inline-block bg-ldd-gray-dark text-white px-4 py-2 rounded text-sm hover:bg-ldd-gray transition-colors">
-            More about us &rarr;
-          </a>
+      <div class="grid md:grid-cols-4 gap-6 items-start">
+        <div class="bg-ldd-orange text-white px-4 py-2 rounded text-sm font-semibold inline-block">About Us</div>
+        <div class="md:col-span-3 flex gap-6">
+          <div class="w-32 h-24 bg-gray-200 rounded flex-shrink-0 hidden md:block"></div>
+          <div>
+            <p class="text-gray-600 text-sm mb-3">
+              LDD Navigator is a resource for prison staff and professionals working with offenders who have learning difficulties and disabilities. We provide practical strategies, information about different conditions, and resources to help you support people more effectively.
+            </p>
+            <a href="/about" class="inline-flex items-center gap-1 bg-ldd-gray-dark text-white px-4 py-2 rounded text-sm hover:bg-ldd-gray transition-colors">
+              More about us <ChevronRight class="w-4 h-4" />
+            </a>
+          </div>
         </div>
       </div>
 
       <!-- About This Site -->
-      <div class="grid md:grid-cols-3 gap-6 items-start">
-        <div class="bg-ldd-orange text-white px-4 py-2 rounded font-semibold inline-block">About This Site</div>
-        <div class="md:col-span-2">
-          <p class="text-gray-600 mb-4">
-            This website helps you identify behaviours that may indicate a learning difficulty, understand what might be causing them, and find strategies to help. You can navigate by behaviour, difficulty, or strategy to find the information you need.
-          </p>
-          <a href="/about#site" class="inline-block bg-ldd-orange text-white px-4 py-2 rounded text-sm hover:bg-ldd-orange-dark transition-colors">
-            More about this site &rarr;
-          </a>
+      <div class="grid md:grid-cols-4 gap-6 items-start">
+        <div class="bg-ldd-orange text-white px-4 py-2 rounded text-sm font-semibold inline-block">About This Site</div>
+        <div class="md:col-span-3 flex gap-6">
+          <div class="w-32 h-24 bg-gray-200 rounded flex-shrink-0 hidden md:block"></div>
+          <div>
+            <p class="text-gray-600 text-sm mb-3">
+              This website helps you identify behaviours that may indicate a learning difficulty, understand what might be causing them, and find strategies to help. You can navigate by behaviour, difficulty, or strategy to find the information you need.
+            </p>
+            <a href="/about#site" class="inline-flex items-center gap-1 bg-ldd-orange text-white px-4 py-2 rounded text-sm hover:bg-ldd-orange-dark transition-colors">
+              More about this site <ChevronRight class="w-4 h-4" />
+            </a>
+          </div>
         </div>
       </div>
 
-      <!-- Difficulties Overview -->
-      <div>
-        <h2 class="text-2xl font-semibold text-ldd-gray-dark mb-6">Learning Difficulties</h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {difficulties.map(diff => (
-            <a
-              href={`/difficulties/${diff.id}`}
-              class="block bg-gray-50 border border-gray-200 rounded p-4 hover:border-ldd-green hover:shadow-sm transition-all"
-            >
-              <h3 class="font-semibold text-ldd-gray-dark mb-1">{diff.title}</h3>
-              <p class="text-sm text-gray-600 line-clamp-2">{diff.shortDescription}</p>
+      <!-- Community -->
+      <div class="grid md:grid-cols-4 gap-6 items-start">
+        <div class="bg-ldd-green text-white px-4 py-2 rounded text-sm font-semibold inline-block">Community</div>
+        <div class="md:col-span-3 flex gap-6">
+          <div class="w-32 h-24 bg-gray-200 rounded flex-shrink-0 hidden md:block"></div>
+          <div>
+            <p class="text-gray-600 text-sm mb-3">
+              Join our community to share experiences, ask questions, and learn from other professionals working with people who have learning difficulties and disabilities.
+            </p>
+            <a href="/about#community" class="inline-flex items-center gap-1 bg-ldd-green text-white px-4 py-2 rounded text-sm hover:bg-ldd-green-dark transition-colors">
+              More about the Community <ChevronRight class="w-4 h-4" />
             </a>
-          ))}
+          </div>
         </div>
       </div>
     </div>
   </section>
 </Layout>
+
+<script define:vars={{ behavioursData }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.behaviour-btn');
+    const behaviourText = document.getElementById('behaviour-text');
+    const behaviourDetail = document.getElementById('behaviour-detail');
+    const difficultyText = document.getElementById('difficulty-text');
+    const difficultyDetail = document.getElementById('difficulty-detail');
+    const strategiesText = document.getElementById('strategies-text');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.behaviourId;
+        const data = behavioursData.find(b => b.id === id);
+
+        if (!data) return;
+
+        // Update active state
+        buttons.forEach(b => {
+          b.classList.remove('active', 'bg-white', 'text-ldd-gray-dark', 'border-b', 'border-gray-200');
+          b.classList.add('bg-ldd-blue', 'text-white', 'border-b', 'border-ldd-blue-dark/20');
+        });
+        btn.classList.remove('bg-ldd-blue', 'text-white', 'border-ldd-blue-dark/20');
+        btn.classList.add('active', 'bg-white', 'text-ldd-gray-dark', 'border-gray-200');
+
+        // Update content
+        if (behaviourText) behaviourText.textContent = data.description;
+        if (behaviourDetail) behaviourDetail.textContent = '';
+        if (difficultyText) difficultyText.textContent = data.difficulty;
+        if (difficultyDetail) {
+          const diffs = data.relatedDifficulties.map(d => d.title).join(', ');
+          difficultyDetail.textContent = diffs ? `This could be a sign of ${diffs}.` : '';
+        }
+        if (strategiesText) {
+          const strats = data.strategies.map(s => s.title).join(', ');
+          strategiesText.textContent = strats || 'Various strategies can help with this behaviour.';
+        }
+      });
+    });
+  });
+</script>
