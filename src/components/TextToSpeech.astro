@@ -6,20 +6,28 @@
 <div id="tts-panel" style="display:none; position:fixed; bottom:1rem; right:1rem; z-index:50;">
   <div style="background:#fff; border-radius:0.5rem; box-shadow:0 4px 12px rgba(0,0,0,0.15); border:1px solid #e5e7eb; padding:0.75rem;">
     <div style="display:flex; align-items:center; gap:0.5rem;">
-      <button id="tts-play-btn" title="Play whole page" style="display:flex; align-items:center; justify-content:center; width:2.5rem; height:2.5rem; border-radius:0.5rem; border:none; cursor:pointer; background:#6b8c3a; color:white;">
+      <!-- Prev block -->
+      <button id="tts-prev-btn" title="Previous block" style="display:flex; align-items:center; justify-content:center; width:2.25rem; height:2.25rem; border-radius:0.5rem; border:none; cursor:pointer; background:#4faad8; color:white; font-size:1.1rem; font-weight:bold;">&#9664;</button>
+      <!-- Play -->
+      <button id="tts-play-btn" title="Play" style="display:flex; align-items:center; justify-content:center; width:2.5rem; height:2.5rem; border-radius:0.5rem; border:none; cursor:pointer; background:#6b8c3a; color:white;">
         <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/></svg>
       </button>
+      <!-- Pause -->
       <button id="tts-pause-btn" title="Pause" style="display:none; align-items:center; justify-content:center; width:2.5rem; height:2.5rem; border-radius:0.5rem; border:none; cursor:pointer; background:#e88a1e; color:white;">
         <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M5.75 3a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V3.75A.75.75 0 007.25 3h-1.5zM12.75 3a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V3.75a.75.75 0 00-.75-.75h-1.5z"/></svg>
       </button>
-      <button id="tts-stop-btn" title="Stop" style="display:flex; align-items:center; justify-content:center; width:2.5rem; height:2.5rem; border-radius:0.5rem; border:none; cursor:pointer; background:#6b7280; color:white;">
-        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M4.75 3A1.75 1.75 0 003 4.75v10.5c0 .966.784 1.75 1.75 1.75h10.5A1.75 1.75 0 0017 15.25V4.75A1.75 1.75 0 0015.25 3H4.75z"/></svg>
+      <!-- Next block -->
+      <button id="tts-next-btn" title="Next block" style="display:flex; align-items:center; justify-content:center; width:2.25rem; height:2.25rem; border-radius:0.5rem; border:none; cursor:pointer; background:#4faad8; color:white; font-size:1.1rem; font-weight:bold;">&#9654;</button>
+      <!-- Stop -->
+      <button id="tts-stop-btn" title="Stop" style="display:flex; align-items:center; justify-content:center; width:2.25rem; height:2.25rem; border-radius:0.5rem; border:none; cursor:pointer; background:#6b7280; color:white;">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20"><path d="M4.75 3A1.75 1.75 0 003 4.75v10.5c0 .966.784 1.75 1.75 1.75h10.5A1.75 1.75 0 0017 15.25V4.75A1.75 1.75 0 0015.25 3H4.75z"/></svg>
       </button>
-      <button id="tts-close-btn" title="Close" style="display:flex; align-items:center; justify-content:center; width:2.5rem; height:2.5rem; border-radius:0.5rem; border:none; cursor:pointer; background:#d1d5db; color:#374151;">
-        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      <!-- Close -->
+      <button id="tts-close-btn" title="Close" style="display:flex; align-items:center; justify-content:center; width:2.25rem; height:2.25rem; border-radius:0.5rem; border:none; cursor:pointer; background:#d1d5db; color:#374151;">
+        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
-    <div id="tts-status" style="font-size:0.75rem; color:#6b7280; margin-top:0.5rem; text-align:center; max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"></div>
+    <div id="tts-status" style="font-size:0.75rem; color:#6b7280; margin-top:0.5rem; text-align:center; max-width:260px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"></div>
   </div>
 </div>
 
@@ -35,7 +43,6 @@
 </button>
 
 <style is:global>
-  /* Highlight speakable sections on hover when TTS is active */
   .tts-active .tts-hoverable {
     transition: background-color 0.15s ease, outline-color 0.15s ease;
     cursor: pointer;
@@ -48,7 +55,6 @@
     border-radius: 4px;
   }
 
-  /* Currently speaking indicator */
   .tts-speaking {
     outline: 4px solid #6b8c3a !important;
     outline-offset: 4px;
@@ -58,12 +64,8 @@
   }
 
   @keyframes tts-pulse {
-    0%, 100% {
-      outline-color: #6b8c3a;
-    }
-    50% {
-      outline-color: #5a7830;
-    }
+    0%, 100% { outline-color: #6b8c3a; }
+    50% { outline-color: #5a7830; }
   }
 </style>
 
@@ -80,29 +82,41 @@
   var panel = document.getElementById('tts-panel');
   var playBtn = document.getElementById('tts-play-btn');
   var pauseBtn = document.getElementById('tts-pause-btn');
+  var prevBtn = document.getElementById('tts-prev-btn');
+  var nextBtn = document.getElementById('tts-next-btn');
   var stopBtn = document.getElementById('tts-stop-btn');
   var closeBtn = document.getElementById('tts-close-btn');
   var statusEl = document.getElementById('tts-status');
 
   var currentElement = null;
   var isActive = false;
-  var textQueue = [];
-  var queueIndex = 0;
+  var isSpeaking = false;
+  var blocks = [];       // all speakable blocks on page
+  var blockIndex = -1;   // current block index
 
-  function markSpeakableSections() {
+  function getBlocks() {
+    blocks = [];
     var selectors = 'main section, main article, main p, main li, main h1, main h2, main h3, main h4, main div.prose, main div[class*="bg-"]';
     var els = document.querySelectorAll(selectors);
     for (var i = 0; i < els.length; i++) {
       var el = els[i];
-      // Skip TTS UI, nav, header, footer
       if (el.closest('#tts-panel') || el.closest('#tts-toggle-btn') || el.closest('nav') || el.closest('header') || el.closest('footer')) continue;
-      // Only mark if it has meaningful text
       var text = (el.textContent || '').trim();
       if (text.length > 10) {
-        el.setAttribute('data-tts-block', 'true');
-        el.classList.add('tts-hoverable');
+        // Avoid parent blocks that contain child blocks we already have
+        var dominated = false;
+        for (var j = 0; j < blocks.length; j++) {
+          if (el.contains(blocks[j])) { dominated = true; break; }
+        }
+        // Prefer leaf-ish blocks - skip if a child is already listed
+        if (!dominated) {
+          el.setAttribute('data-tts-block', 'true');
+          el.classList.add('tts-hoverable');
+          blocks.push(el);
+        }
       }
     }
+    return blocks;
   }
 
   function getTextContent(el) {
@@ -127,80 +141,60 @@
       currentElement.classList.remove('tts-speaking');
       currentElement = null;
     }
+    isSpeaking = false;
   }
 
-  function speak(text, element) {
+  function speakText(text, element) {
     if (!text) return;
+
+    // Stop current speech first, then speak after a small delay
+    // This avoids the Chrome bug where cancel() + speak() fires an error
     synth.cancel();
     clearSpeaking();
 
-    var utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.9;
-    utterance.pitch = 1;
+    setTimeout(function() {
+      var utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
 
-    showPlaying();
+      isSpeaking = true;
+      showPlaying();
 
-    if (element) {
-      currentElement = element;
-      element.classList.add('tts-speaking');
-    }
+      if (element) {
+        currentElement = element;
+        element.classList.add('tts-speaking');
+        // Scroll into view if needed
+        element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
 
-    utterance.onend = function() {
-      clearSpeaking();
-      if (queueIndex < textQueue.length - 1) {
-        queueIndex++;
-        speak(textQueue[queueIndex]);
-      } else {
+      utterance.onend = function() {
+        clearSpeaking();
         showPaused();
-        statusEl.textContent = 'Finished';
-        textQueue = [];
-        queueIndex = 0;
-      }
-    };
+        statusEl.textContent = 'Finished - use arrows to navigate';
+      };
 
-    utterance.onerror = function() {
-      clearSpeaking();
-      showPaused();
-      statusEl.textContent = 'Error occurred';
-    };
+      utterance.onerror = function(e) {
+        // Ignore "interrupted" errors - these happen when cancel() is called
+        if (e.error === 'interrupted' || e.error === 'canceled') return;
+        clearSpeaking();
+        showPaused();
+        statusEl.textContent = 'Speech error: ' + (e.error || 'unknown');
+      };
 
-    synth.speak(utterance);
-    var preview = text.length > 35 ? text.substring(0, 35) + '...' : text;
-    statusEl.textContent = preview;
+      synth.speak(utterance);
+      var preview = text.length > 30 ? text.substring(0, 30) + '...' : text;
+      statusEl.textContent = preview;
+    }, 100);
   }
 
-  function speakElement(element) {
-    var text = getTextContent(element);
+  function speakBlock(index) {
+    if (index < 0 || index >= blocks.length) return;
+    blockIndex = index;
+    var el = blocks[index];
+    var text = getTextContent(el);
     if (text) {
-      textQueue = [text];
-      queueIndex = 0;
-      speak(text, element);
-    }
-  }
-
-  function speakPage() {
-    var main = document.querySelector('main');
-    if (!main) return;
-    var text = getTextContent(main);
-    if (!text) return;
-
-    var sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
-    textQueue = [];
-    var chunk = '';
-    for (var i = 0; i < sentences.length; i++) {
-      if (chunk.length + sentences[i].length < 200) {
-        chunk += sentences[i];
-      } else {
-        if (chunk) textQueue.push(chunk.trim());
-        chunk = sentences[i];
-      }
-    }
-    if (chunk) textQueue.push(chunk.trim());
-
-    queueIndex = 0;
-    if (textQueue.length > 0) {
-      speak(textQueue[0]);
-      statusEl.textContent = 'Reading page (' + textQueue.length + ' parts)';
+      speakText(text, el);
+      statusEl.textContent = 'Block ' + (index + 1) + '/' + blocks.length;
     }
   }
 
@@ -209,8 +203,9 @@
     toggleBtn.style.display = 'none';
     document.body.classList.add('tts-active');
     isActive = true;
-    markSpeakableSections();
-    statusEl.textContent = 'Click any highlighted section, or press Play';
+    getBlocks();
+    blockIndex = -1;
+    statusEl.textContent = 'Click a section or use arrows (' + blocks.length + ' blocks)';
   }
 
   function hidePanel() {
@@ -220,14 +215,13 @@
     toggleBtn.style.display = 'block';
     document.body.classList.remove('tts-active');
     isActive = false;
-    // Remove hoverable classes
     var hoverables = document.querySelectorAll('.tts-hoverable');
     for (var i = 0; i < hoverables.length; i++) {
       hoverables[i].classList.remove('tts-hoverable');
     }
     showPaused();
-    textQueue = [];
-    queueIndex = 0;
+    blocks = [];
+    blockIndex = -1;
   }
 
   // Button handlers
@@ -238,8 +232,12 @@
     if (synth.paused) {
       synth.resume();
       showPlaying();
+    } else if (blockIndex >= 0 && blockIndex < blocks.length) {
+      // Re-read current block
+      speakBlock(blockIndex);
     } else {
-      speakPage();
+      // Start from first block
+      if (blocks.length > 0) speakBlock(0);
     }
   });
 
@@ -252,35 +250,65 @@
     synth.cancel();
     clearSpeaking();
     showPaused();
-    textQueue = [];
-    queueIndex = 0;
-    statusEl.textContent = 'Stopped';
+    statusEl.textContent = 'Stopped - use arrows to navigate';
+  });
+
+  prevBtn.addEventListener('click', function() {
+    if (blocks.length === 0) return;
+    synth.cancel();
+    clearSpeaking();
+    if (blockIndex <= 0) {
+      blockIndex = 0;
+    } else {
+      blockIndex--;
+    }
+    speakBlock(blockIndex);
+  });
+
+  nextBtn.addEventListener('click', function() {
+    if (blocks.length === 0) return;
+    synth.cancel();
+    clearSpeaking();
+    if (blockIndex < blocks.length - 1) {
+      blockIndex++;
+    } else {
+      blockIndex = blocks.length - 1;
+      statusEl.textContent = 'Last block';
+      return;
+    }
+    speakBlock(blockIndex);
   });
 
   // Click on content to read it
   document.addEventListener('click', function(e) {
     if (!isActive) return;
-
-    // Get the actual element - handle SVG elements and text nodes
     var target = e.target;
     if (!target || !target.closest) return;
-
-    // Ignore clicks on TTS controls
     if (target.closest('#tts-panel') || target.closest('#tts-toggle-btn')) return;
 
-    // Find nearest readable block
     var block = target.closest('.tts-hoverable') || target.closest('[data-tts-block]');
-
     if (block) {
       e.preventDefault();
       e.stopPropagation();
-      speakElement(block);
+      // Find the block index
+      for (var i = 0; i < blocks.length; i++) {
+        if (blocks[i] === block) {
+          speakBlock(i);
+          return;
+        }
+      }
+      // Block not in list, speak it directly
+      var text = getTextContent(block);
+      if (text) speakText(text, block);
     }
   });
 
-  // Escape to close
+  // Keyboard shortcuts
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && isActive) hidePanel();
+    if (!isActive) return;
+    if (e.key === 'Escape') hidePanel();
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { nextBtn.click(); e.preventDefault(); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { prevBtn.click(); e.preventDefault(); }
   });
 })();
 </script>
